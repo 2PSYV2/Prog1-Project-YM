@@ -1,4 +1,6 @@
-# Prog1-Project-YM
+# FrögHammers // FrögTekk
+# Labirinth
+
 Marat Galiullin / Y8142163Q
 Yevhenii Edelshteyn / Y3298696L
 
