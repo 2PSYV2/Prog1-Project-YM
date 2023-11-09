@@ -1,7 +1,6 @@
 # FrögHammers // FrögTekk
 
-Marat Galiullin / Y8142163Q
-
+Marat Galiullin / Y8142163Q \n
 Yevhenii Edelshteyn / Y3298696L
 
 # Labirinth
