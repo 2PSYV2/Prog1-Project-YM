@@ -1,8 +1,9 @@
 # FrögHammers // FrögTekk
-# Labirinth
 
 Marat Galiullin / Y8142163Q
 Yevhenii Edelshteyn / Y3298696L
+
+# Labirinth
 
 Included libraries : Tigr.c.h
 
