@@ -64,7 +64,7 @@ struct Map_tile{
     int position[2];                 // x-y-z
 };
 
-struct enemy{
+struct Enemy{
     Core core;
     int difficulty;
     int gold_reward;
@@ -95,8 +95,8 @@ int main(){
     struct GameOp game;
     struct Hero hero;
     struct Map_tile tile[];
-
-    // hero.core.name
+    
+    // ej: hero.core.name
     // Default settings
     game.window_w = 1920;
     game.window.h = 1080;
@@ -268,7 +268,7 @@ void hero_attacks_1st(Enemy enemy, Hero hero, bool *hero_attacks1){             
 
 }
 
-void player_attack(Hero hero, Enemy *enemy){               // El ataque del jugador
+void player_attack(struct Hero hero, Enemy *enemy){               // El ataque del jugador
 
     int atack;
 
@@ -309,9 +309,9 @@ void item_use(Hero *hero, Enemy *enemy){                    // Módulo lógico d
 
 }
 
-void player_move(Hero *hero){                // Módulo lógco del movimineto del jugador en vértices xyz
+void player_move(struct Hero *hero){                // Módulo lógco del movimineto del jugador en vértices xyz
     if(/*x*/){
-        hero.core.position[1] = hero.core.position[1] + hero.facing_direction[1];
+        hero.core.position[1] = hero.core.position[1] + hero.Facing_direction[1];
     }
     if (/*y*/)
     {
