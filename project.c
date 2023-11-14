@@ -54,14 +54,14 @@ struct Core{
     int level;
     int initiative;
     int stamina;
-    int position[3];                 // x-y-z
+    int position[2];                 // x-y-z
     int skills[];
     bool range_attack;
     bool mele_attack;
 };
 
 struct Map_tile{
-    int position[3];                 // x-y-z
+    int position[2];                 // x-y-z
 };
 
 struct enemy{
@@ -75,7 +75,7 @@ struct enemy{
 };
 
 struct Hero{
-    Core core;
+    struct Core core;
     int Facing_direction[3];
     int gold;
     int max_health;
@@ -91,9 +91,13 @@ struct GameOp{
 // Main del programa
 int main(){
 
+    // Struct game elements declaration
+    struct GameOp game;
+    struct Hero hero;
+    struct Map_tile tile[];
+
+    // hero.core.name
     // Default settings
-    GameOp game;
-    Hero hero;
     game.window_w = 1920;
     game.window.h = 1080;
 
@@ -138,7 +142,7 @@ void settings(GameOp *game){
         game.window_w = 1280;
         game.window_h = 720;
         break;    
-    default:    // Error deresolcion no existente
+    default:    // Error de resolcion no existente
         break;
     }
 
