@@ -55,7 +55,7 @@ struct Core{
     int initiative;
     int stamina;
     int position[2];                 // x-y-z
-    int skills[];
+    int skills[10];
     bool range_attack;
     bool mele_attack;
 };
@@ -65,18 +65,18 @@ struct Map_tile{
 };
 
 struct Enemy{
-    Core core;
+    struct Core core;
     int difficulty;
     int gold_reward;
     int exp_reward;
     int item_reward_chance;
-    int item_reward_set[]           // Objetos que pueden ser recibidos
+    int item_reward_set[10];          // Objetos que pueden ser recibidos
     bool item_reward;
 };
 
 struct Hero{
     struct Core core;
-    int Facing_direction[3];
+    int facing_direction[3];
     int gold;
     int max_health;
     int experince;
@@ -84,9 +84,9 @@ struct Hero{
 };
 
 struct GameOp{
-    int wndow_w;
+    int window_w;
     int window_h;
-}
+};
 
 // Main del programa
 int main(){
@@ -94,12 +94,12 @@ int main(){
     // Struct game elements declaration
     struct GameOp game;
     struct Hero hero;
-    struct Map_tile tile[];
+    struct Map_tile tile[2];
     
     // ej: hero.core.name
     // Default settings
     game.window_w = 1920;
-    game.window.h = 1080;
+    game.window_h = 1080;
 
     srand(time(NULL));
 
@@ -130,23 +130,23 @@ void event_game_menu_start(){
 
 }
 
-void settings(GameOp *game){
+void settings( struct GameOp *game){
 
     switch (/*Opcion de las probablemente 2 opciones*/)
     {
     case 1:
-        game.window_w = 1920;
-        game.window_h = 1080;
+        game->window_w = 1920;
+        game->window_h = 1080;
         break;
     case 2:
-        game.window_w = 1280;
-        game.window_h = 720;
+        game->window_w = 1280;
+        game->window_h = 720;
         break;    
     default:    // Error de resolcion no existente
         break;
     }
 
-    Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);
+    Tigr *screen = tigrWindow(game->window_w,game->window_h,"PR1",0);
 
 }
 
@@ -156,7 +156,7 @@ void dice_roll(int *dice_result){   // Módulo lógico de la tirada de dados vir
     
 }
 
-void charcter_create(Hero *hero){             // Módulo lógico de la creacion del protagonista
+void charcter_create(struct Hero *hero){             // Módulo lógico de la creacion del protagonista
 
 switch (/*hero class*/)
 {
@@ -172,9 +172,9 @@ default:
 
 }
 
-void enemy_selector_area(Hero hero){// Selección de la lista de enemigos dependiendo del area
+void enemy_selector_area(struct Hero hero){// Selección de la lista de enemigos dependiendo del area
 
-    switch(Hero.core.position[/*z*/]){
+    switch(hero.core.position[/*z*/]){
         case 1: enemy_creator_Tutorial();
             break;
         case 2:
@@ -200,7 +200,7 @@ void enemy_selector_area(Hero hero){// Selección de la lista de enemigos depend
 void enemy_creator_Tutorial(){
 
     switch (){
-    case 
+    case /*caso*/:
         break;
     
     default: // Error
@@ -257,9 +257,9 @@ void enemy_creator_Gym(){
 
 }
 
-void hero_attacks_1st(Enemy enemy, Hero hero, bool *hero_attacks1){                // Compración de las iniciativas de los oponentes
+void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1){                // Compración de las iniciativas de los oponentes
     // a lo mejor sustituir el modulo de void al bool
-    if(hero.initiative>enemy.inititive){
+    if(hero.core.initiative>enemy.core.initiative){
         hero_attacks1=true;
     }
     else{
@@ -268,7 +268,7 @@ void hero_attacks_1st(Enemy enemy, Hero hero, bool *hero_attacks1){             
 
 }
 
-void player_attack(struct Hero hero, Enemy *enemy){               // El ataque del jugador
+void player_attack(struct Hero hero, struct Enemy *enemy){               // El ataque del jugador
 
     int atack;
 
@@ -288,15 +288,15 @@ void player_attack(struct Hero hero, Enemy *enemy){               // El ataque d
 
 }
 
-void enemy_attack(Enemy *enemy){                // EL ataque del enemigo
+void enemy_attack(struct Enemy *enemy){                // EL ataque del enemigo
 
 }
 
-void combat_reward(Hero *hero, Enemy *enemy){               // Módulo lógico de la recompensa
+void combat_reward(struct Hero *hero, struct Enemy *enemy){               // Módulo lógico de la recompensa
 
 }
 
-void item_use(Hero *hero, Enemy *enemy){                    // Módulo lógico del uso de un objeto consumible/usable
+void item_use(struct Hero *hero, struct Enemy *enemy){                    // Módulo lógico del uso de un objeto consumible/usable
 
     switch (/*Item used from enum*/)
     {
@@ -311,15 +311,15 @@ void item_use(Hero *hero, Enemy *enemy){                    // Módulo lógico d
 
 void player_move(struct Hero *hero){                // Módulo lógco del movimineto del jugador en vértices xyz
     if(/*x*/){
-        hero.core.position[1] = hero.core.position[1] + hero.Facing_direction[1];
+        hero->core.position[1] = hero->core.position[1] + hero->facing_direction[1];
     }
     if (/*y*/)
     {
-        hero.core.position[2] = hero.core.position[2] + hero.facing_direction[2];
+        hero->core.position[2] = hero->core.position[2] + hero->facing_direction[2];
     }
     if (/*z*/)
     {
-        hero.core.position[3] = hero.core.position[3] + /*en fuincion de la escalera en la que estamos*/; 
+        hero->core.position[3] = hero->core.position[3] + /*en fuincion de la escalera en la que estamos*/;
     }
     
 }
@@ -327,66 +327,66 @@ void player_move(struct Hero *hero){                // Módulo lógco del movimi
 
     // !!!! Se pueede optimizar a numeros de 1 a 4 con suma siendo el giro a la derecha y resta a la izquierda, donde 0 es 4 y 5 es 1
 
-void player_turn_right(Hero *hero){ // Módulo lógico del cambio de la dirección a la derecha
+void player_turn_right(struct Hero *hero){ // Módulo lógico del cambio de la dirección a la derecha
 
     bool have_turned = false;
 
-    if(hero.facing_direction[1] == 1 && have_turned == false){
-        hero.facing_direction[1] = 0;
-        hero.facing_direction[2] = hero.facing_direction[2] + 1;
-        have_turned = true
+    if (hero->facing_direction[1] == 1 && have_turned == false){
+        hero->facing_direction[1] = 0;
+        hero->facing_direction[2] = hero->facing_direction[2] + 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[1] == -1 && have_turned == false){
-        hero.facing_direction[1] = 0;
-        hero.facing_direction[2] = hero.facing_direction[2] - 1;
-        have_turned = true
+    if (hero->facing_direction[1] == -1 && have_turned == false){
+        hero->facing_direction[1] = 0;
+        hero->facing_direction[2] = hero->facing_direction[2] - 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[2] == 1 && have_turned == false){
-        hero.facing_direction[2] = 0;
-        hero.facing_direction[1] = hero.facing_direction[1] - 1;
-        have_turned = true
+    if (hero->facing_direction[2] == 1 && have_turned == false){
+        hero->facing_direction[2] = 0;
+        hero->facing_direction[1] = hero->facing_direction[1] - 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[2] == -1 && have_turned == false){
-        hero.facing_direction[2] = 0;
-        hero.facing_direction[1] = hero.facing_direction[1] + 1;
-        have_turned = true
+    if (hero->facing_direction[2] == -1 && have_turned == false){
+        hero->facing_direction[2] = 0;
+        hero->facing_direction[1] = hero->facing_direction[1] + 1;
+        have_turned = true;
     }
 }
 
-void player_turn_left(Hero *hero){ // Módulo lógico del cambio de la dirección a la izquierda
+void player_turn_left(struct Hero *hero){ // Módulo lógico del cambio de la dirección a la izquierda
 
     bool have_turned = false;
 
-    if(hero.facing_direction[1] == 1 && have_turned == false){
-        hero.facing_direction[1] = 0;
-        hero.facing_direction[2] = hero.facing_direction[2] - 1;
-        have_turned = true
+    if (hero->facing_direction[1] == 1 && have_turned == false){
+        hero->facing_direction[1] = 0;
+        hero->facing_direction[2] = hero->facing_direction[2] - 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[1] == -1 && have_turned == false){
-        hero.facing_direction[1] = 0;
-        hero.facing_direction[2] = hero.facing_direction[2] + 1;
-        have_turned = true
+    if (hero->facing_direction[1] == -1 && have_turned == false){
+        hero->facing_direction[1] = 0;
+        hero->facing_direction[2] = hero->facing_direction[2] + 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[2] == 1 && have_turned == false){
-        hero.facing_direction[2] = 0;
-        hero.facing_direction[1] = hero.facing_direction[1] + 1;
-        have_turned = true
+    if (hero->facing_direction[2] == 1 && have_turned == false){
+        hero->facing_direction[2] = 0;
+        hero->facing_direction[1] = hero->facing_direction[1] + 1;
+        have_turned = true;
     }
-    if(hero.facing_direction[2] == -1 && have_turned == false){
-        hero.facing_direction[2] = 0;
-        hero.facing_direction[1] = hero.facing_direction[1] - 1;
-        have_turned = true
+    if (hero->facing_direction[2] == -1 && have_turned == false){
+        hero->facing_direction[2] = 0;
+        hero->facing_direction[1] = hero->facing_direction[1] - 1;
+        have_turned = true;
     }
 }
 
-void player_lvlup(Hero *hero){                 // Módulo lógico del ascenso del nivel del jugador
+void player_lvlup(struct Hero *hero){                 // Módulo lógico del ascenso del nivel del jugador
     /*Pense en el concepto de abrir una ventana aparte con el spreadshit del jugador para modificar en ella las estats  deseadas*/
     int stat_points = 5;
     int choice;
 
-    hero.max_healt = hero.max_health+100;
-    hero.core.health = hero.max_health;
-    
+    hero->max_health = hero->max_health + 100;
+    hero->core.health = hero->max_health;
+
     do{
 
         /*solicitud de la opicon del jugador*/
@@ -394,7 +394,7 @@ void player_lvlup(Hero *hero){                 // Módulo lógico del ascenso de
         switch ()
         {
         case 1:
-            hero.core.defence=hero.core.defence+1;
+            hero->core.defence = hero->core.defence + 1;
             break;
                 /*etc*/
         default:
@@ -409,16 +409,16 @@ void inspect(){                     // Módulo lógico del mensaje al inspeccion
 
 }
 
-void shop(Hero *hero){                        // Módulo lógico de las tiendas en el juego
+void shop(struct Hero *hero){                        // Módulo lógico de las tiendas en el juego
 
-switch (hero.core.position[/*z*/])
-{
-case /*ya veremos como lo hacemos*/:
-    /* code */
-    break;
+    switch (hero->core.position[/*z*/])
+    {
+    case /*ya veremos como lo hacemos*/:
+        /* code */
+        break;
 
-default:
-    break;
+    default:
+        break;
 }
 
 }
@@ -427,7 +427,7 @@ void pov_change(/*Dependendo de la situacion mostrara una cosa u otra*/){       
 /*pensé en usar este módulo tmb para crear una ventana aparte con cosas como el spreadsheet del  personaje, seria bastante parecido alos juegos de rol a papel  (d&d)*/
 }
 
-void game_over(Hero *hero){                   // Módulo lógico de la pérdida del partido
+void game_over(struct Hero *hero){                   // Módulo lógico de la pérdida del partido
 /*purge the fucking game, alt F4 him*/
 /*A lo mejor pasarlo al bool, que así se puede cerrrar el juego con la condiocion true/dalse del modulo*/
 }
@@ -440,16 +440,16 @@ void load_game(){                    // Cargar partido guardado
 
 }
 
-void event_stat_check(Hero *hero){            // Módulo lógico del tiro de dados virtual en un evento
+void event_stat_check(struct Hero *hero){            // Módulo lógico del tiro de dados virtual en un evento
 
-switch (hero.core.position[/*z*/])
-{
-case /* constant-expression */:
-    /* code */
-    break;
+    switch (hero->core.position[/*z*/])
+    {
+    case /* constant-expression */:
+        /* code */
+        break;
 
-default:
-    break;
+    default:
+        break;
 }
 
 }
