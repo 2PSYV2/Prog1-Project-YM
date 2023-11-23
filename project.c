@@ -1,6 +1,7 @@
 /*
 Yevhenii Edelshteyn
 Marat Galiullin
+
 2023-2024
 */
 
@@ -15,7 +16,7 @@ tecla de cambio entre mivimiento y manipulacion del menu con flechas;;
 #include <stdlib.h>                 // Libreria estándart del C
 #include <time.h>                   // Libreria del tiempo, relevante para los numeros aleatorios
 #include "tigr.h"                   // Libreria gráfica tigr
-//#include "custom.h"               // Libreria personalizada para usos específicos
+//#include "items.h"
 
 //Constantes utilizadas en le juego
 #define NAMEMAX 32;
@@ -25,25 +26,52 @@ enum Difficulty{
     Trivial, Easy, Medium, Hard, Extreme
 };
 
-enum Characters{
-    Minotauro, Ares, Titan, Chimera, Uroboros, Talos, Spartak, Cthulhu, Kali
+enum Characters_Greece_and_Boss{
+    Minotauro, Ares, Titan, Chimera, Uroboros, Talos, Spartak 
 };
 
+enum Characters_Scandi{
+    Odin, Loki, Freyr, Ullr, Magni, Skadi, Vali, Frigg, Heimdall, Idunn
+};
+
+enum Characters_Slavic{
+    Perun, Morena, Baba Yaga, Kikimora, Svarog, Chernoslav, Nija, Korab, Chernobog, Belobog, Khotabych
+};
+
+enum Secret_Lvls{
+    Cthulhu, Kali, Boss of the Gym, Disney, Giant Sphinx
+};o
+
+
 enum Heroes {
-    Mage, Sage , etc
+    Mage, Warrior, Rogue
 };
 
 enum Items {
-    Red_Tuxedo, Bow
+    potion_health, potion_strength, sword, bow, skills
 };
 
 enum Skills {
-    fireball, hehe
+    fireball, Skills Exchange,  hehe
+};
+
+enum Body_parts{
+    head, body, l_hand, r_hand, l_finger, r_finger, legs
+};
+
+enum Item_statup{
+    strenghtup, luckup, agilityup, evadeup, intelligenceup
 };
 
 // Structs de los elementos básicos como personajes/enemigos, objetos, etc
+
+struct Skills{
+    int strength;
+    int coste;
+
+};
 struct Core{
-    char name;   
+    char name[NAMEMAX];   
     int health;
     int defence;
     int evade;
@@ -52,10 +80,9 @@ struct Core{
     int luck;
     int inteligence;
     int level;
-    int initiative;
     int stamina;
     int position[2];                 // x-y-z
-    int skills[10];
+    struct Skills[20];
     bool range_attack;
     bool mele_attack;
 };
@@ -74,9 +101,23 @@ struct Enemy{
     bool item_reward;
 };
 
+struct Item{
+    int body_part;
+    int price;
+    int damage;
+    int defennce;
+    int min_lvl;
+    int Item_statup[5];
+    int rarity;
+    bool range;
+    bool mele;
+};
+
 struct Hero{
     struct Core core;
-    int facing_direction[3];
+    struct Item loadout[6];
+    int facing_direction[4];
+    int class;
     int gold;
     int max_health;
     int experince;
@@ -102,7 +143,7 @@ int main(){
     game.window_h = 1080;
 
     srand(time(NULL));
-
+a
     Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);            // Módulo proncipal de la ventana gráfica
 
     while(!tigrClosed(screen) || !tigrKeyDown(TK_ESCAPE) /* o incluso gameover == true*/){                        // Secuencia de salida del juego
@@ -158,21 +199,74 @@ void dice_roll(int *dice_result){   // Módulo lógico de la tirada de dados vir
 
 void charcter_create(struct Hero *hero){             // Módulo lógico de la creacion del protagonista
 
-switch (/*hero class*/)
-{
-case 1:
-    /*estats exclusivas para clase 1*/
-    break;
+scanf("%c", *hero->core.name);
 
-default:
+switch (*hero->class)
+{
+case Mage:
+    *hero->core.agility  = 1;
+    *hero->core.defence = 3;
+    *hero->core.evade = 0;
+    *hero->core.health = 1;
+    *hero->core.inteligence = 3;
+    *hero->core.level = 0;
+    *hero->core.luck = 1;
+    *hero->core.stamina = 1;
+    *hero->core.strength = 2;
+    *hero->core.range_attack = true;
+    *hero->core.mele_attack = false;
+    *hero->experince = 0;
+    *hero->gold = 10;
+    *hero->max_health = 10;
+    *hero->perception = 0;
+    break;
+case Warrior:
+    *hero->core.agility  = 2;
+    *hero->core.defence = 2;
+    *hero->core.evade = 1;
+    *hero->core.health = 2;
+    *hero->core.inteligence = 1;
+    *hero->core.level = 0;
+    *hero->core.luck = 1;
+    *hero->core.stamina = 2;
+    *hero->core.strength = 2;
+    *hero->gold = 10;
+
+
+    *hero->core.range_attack = falses;
+    *hero->core.mele_attack = true;    *hero->experince = 0;
+
+    *hero->max_health = 10;
+    *hero->perception = 0;    break;
+case Rogue:
+
+
+ *ero->core.agility  = 1;3
+    *hero->core.defence = 1;
+    *hero->core.evade = 2;
+    *hero->core.health = 1;
+    *hero->core.inteligence = 3;
+    *hero->core.level = 0;
+    *hero->core.luck = 1;
+    *hero->core.stamina = 2;
+    *hero->core.strength = 1;
+    *hero->gold = 10;
+
+
+    *hero->core.range_attack = true;
+    *hero->core.mele_attack = false;    *hero->experince = 0;    
+
+    *hero->max_health = 10;
+    *hero->perception = 0;    break;default:
     break;
 }
+
 
 /*EL resto de estats comunes que se asignen fuera del switch*/
 
 }
 
-void enemy_selector_area(struct Hero hero){// Selección de la lista de enemigos dependiendo del area
+void enemy_selector_area(struct Hero hero, struct m){// Selección de la lista de enemigos dependiendo del area
 
     switch(hero.core.position[/*z*/]){
         case 1: enemy_creator_Tutorial();
@@ -270,18 +364,17 @@ void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1)
 
 void player_attack(struct Hero hero, struct Enemy *enemy){               // El ataque del jugador
 
-    int atack;
+    int player_attack_choice; // Tipo de ataque deljugador
+    int player_damage_out;
 
-    if(/*ataque == mele*/){
-        atack = 1;
-    }
-
-    switch (atack)
+    switch (player_choice)
     {
-    case 1:
-        /*ataque de mele*/
+    case 1: // mele
+        player_damage_out = hero.loadout->damage + (hero.core.strength + hero.loadout->Item_statup[strenghtup]);
         break;
-    
+    case 2: // ranged
+        player_attack = hero.loadout->damage + (hero.core.agility + hero.loadout->Item_statup[agilityup]);
+        break;
     default:   //error de ataque  no existente
         break;
     }
@@ -331,52 +424,12 @@ void player_turn_right(struct Hero *hero){ // Módulo lógico del cambio de la d
 
     bool have_turned = false;
 
-    if (hero->facing_direction[1] == 1 && have_turned == false){
-        hero->facing_direction[1] = 0;
-        hero->facing_direction[2] = hero->facing_direction[2] + 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[1] == -1 && have_turned == false){
-        hero->facing_direction[1] = 0;
-        hero->facing_direction[2] = hero->facing_direction[2] - 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[2] == 1 && have_turned == false){
-        hero->facing_direction[2] = 0;
-        hero->facing_direction[1] = hero->facing_direction[1] - 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[2] == -1 && have_turned == false){
-        hero->facing_direction[2] = 0;
-        hero->facing_direction[1] = hero->facing_direction[1] + 1;
-        have_turned = true;
-    }
 }
 
 void player_turn_left(struct Hero *hero){ // Módulo lógico del cambio de la dirección a la izquierda
 
     bool have_turned = false;
 
-    if (hero->facing_direction[1] == 1 && have_turned == false){
-        hero->facing_direction[1] = 0;
-        hero->facing_direction[2] = hero->facing_direction[2] - 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[1] == -1 && have_turned == false){
-        hero->facing_direction[1] = 0;
-        hero->facing_direction[2] = hero->facing_direction[2] + 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[2] == 1 && have_turned == false){
-        hero->facing_direction[2] = 0;
-        hero->facing_direction[1] = hero->facing_direction[1] + 1;
-        have_turned = true;
-    }
-    if (hero->facing_direction[2] == -1 && have_turned == false){
-        hero->facing_direction[2] = 0;
-        hero->facing_direction[1] = hero->facing_direction[1] - 1;
-        have_turned = true;
-    }
 }
 
 void player_lvlup(struct Hero *hero){                 // Módulo lógico del ascenso del nivel del jugador
