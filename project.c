@@ -19,7 +19,7 @@ tecla de cambio entre mivimiento y manipulacion del menu con flechas;;
 //#include "items.h"
 
 //Constantes utilizadas en le juego
-#define NAMEMAX 32;
+#define NAMEMAX 32
 
 //Enum de diferentes elementos del juego
 enum Difficulty{
@@ -35,12 +35,12 @@ enum Characters_Scandi{
 };
 
 enum Characters_Slavic{
-    Perun, Morena, Baba Yaga, Kikimora, Svarog, Chernoslav, Nija, Korab, Chernobog, Belobog, Khotabych
+    Perun, Morena, Baba_Yaga, Kikimora, Svarog, Chernoslav, Nija, Korab, Chernobog, Belobog, Khotabych
 };
 
 enum Secret_Lvls{
-    Cthulhu, Kali, Boss of the Gym, Disney, Giant Sphinx
-};o
+    Cthulhu, Kali, Boss_of_the_Gym, Disney, Giant_Sphinx
+};
 
 
 enum Heroes {
@@ -51,8 +51,8 @@ enum Items {
     potion_health, potion_strength, sword, bow, skills
 };
 
-enum Skills {
-    fireball, Skills Exchange,  hehe
+enum SkilList {
+    fireball, Skills, Exchange,  hehe
 };
 
 enum Body_parts{
@@ -82,7 +82,7 @@ struct Core{
     int level;
     int stamina;
     int position[2];                 // x-y-z
-    struct Skills[20];
+    struct Skills skill[20];
     bool range_attack;
     bool mele_attack;
 };
@@ -143,7 +143,7 @@ int main(){
     game.window_h = 1080;
 
     srand(time(NULL));
-a
+
     Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);            // Módulo proncipal de la ventana gráfica
 
     while(!tigrClosed(screen) || !tigrKeyDown(TK_ESCAPE) /* o incluso gameover == true*/){                        // Secuencia de salida del juego
@@ -201,63 +201,60 @@ void charcter_create(struct Hero *hero){             // Módulo lógico de la cr
 
 scanf("%c", *hero->core.name);
 
-switch (*hero->class)
+switch (hero->class)
 {
 case Mage:
-    *hero->core.agility  = 1;
-    *hero->core.defence = 3;
-    *hero->core.evade = 0;
-    *hero->core.health = 1;
-    *hero->core.inteligence = 3;
-    *hero->core.level = 0;
-    *hero->core.luck = 1;
-    *hero->core.stamina = 1;
-    *hero->core.strength = 2;
-    *hero->core.range_attack = true;
-    *hero->core.mele_attack = false;
-    *hero->experince = 0;
-    *hero->gold = 10;
-    *hero->max_health = 10;
-    *hero->perception = 0;
+    hero->core.agility  = 1;
+    hero->core.defence = 3;
+    hero->core.evade = 0;
+    hero->core.health = 1;
+    hero->core.inteligence = 3;
+    hero->core.level = 0;
+    hero->core.luck = 1;
+    hero->core.stamina = 1;
+    hero->core.strength = 2;
+    hero->core.range_attack = true;
+    hero->core.mele_attack = false;
+    hero->experince = 0;
+    hero->gold = 10;
+    hero->max_health = 10;
+    hero->perception = 0;
     break;
 case Warrior:
-    *hero->core.agility  = 2;
-    *hero->core.defence = 2;
-    *hero->core.evade = 1;
-    *hero->core.health = 2;
-    *hero->core.inteligence = 1;
-    *hero->core.level = 0;
-    *hero->core.luck = 1;
-    *hero->core.stamina = 2;
-    *hero->core.strength = 2;
-    *hero->gold = 10;
-
-
-    *hero->core.range_attack = falses;
-    *hero->core.mele_attack = true;    *hero->experince = 0;
-
-    *hero->max_health = 10;
-    *hero->perception = 0;    break;
+    hero->core.agility  = 2;
+    hero->core.defence = 2;
+    hero->core.evade = 1;
+    hero->core.health = 2;
+    hero->core.inteligence = 1;
+    hero->core.level = 0;
+    hero->core.luck = 1;
+    hero->core.stamina = 2;
+    hero->core.strength = 2;
+    hero->gold = 10;
+    hero->core.range_attack = false;
+    hero->core.mele_attack = true;    
+    hero->experince = 0;
+    hero->max_health = 10;
+    hero->perception = 0;    
+    break;
 case Rogue:
-
-
- *ero->core.agility  = 1;3
-    *hero->core.defence = 1;
-    *hero->core.evade = 2;
-    *hero->core.health = 1;
-    *hero->core.inteligence = 3;
-    *hero->core.level = 0;
-    *hero->core.luck = 1;
-    *hero->core.stamina = 2;
-    *hero->core.strength = 1;
-    *hero->gold = 10;
-
-
-    *hero->core.range_attack = true;
-    *hero->core.mele_attack = false;    *hero->experince = 0;    
-
-    *hero->max_health = 10;
-    *hero->perception = 0;    break;default:
+    hero->core.agility  = 3;
+    hero->core.defence = 1;
+    hero->core.evade = 2;
+    hero->core.health = 1;
+    hero->core.inteligence = 3;
+    hero->core.level = 0;
+    hero->core.luck = 1;
+    hero->core.stamina = 2;
+    hero->core.strength = 1;
+    hero->gold = 10;
+    hero->core.range_attack = true;
+    hero->core.mele_attack = false;    
+    hero->experince = 0;    
+    hero->max_health = 10;
+    hero->perception = 0;    
+    break;
+default:
     break;
 }
 
@@ -266,7 +263,7 @@ case Rogue:
 
 }
 
-void enemy_selector_area(struct Hero hero, struct m){// Selección de la lista de enemigos dependiendo del area
+void enemy_selector_area(struct Hero hero){// Selección de la lista de enemigos dependiendo del area
 
     switch(hero.core.position[/*z*/]){
         case 1: enemy_creator_Tutorial();
@@ -353,7 +350,7 @@ void enemy_creator_Gym(){
 
 void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1){                // Compración de las iniciativas de los oponentes
     // a lo mejor sustituir el modulo de void al bool
-    if(hero.core.initiative>enemy.core.initiative){
+    if(hero.core.agility>enemy.core.agility){
         hero_attacks1=true;
     }
     else{
@@ -366,6 +363,7 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
 
     int player_attack_choice; // Tipo de ataque deljugador
     int player_damage_out;
+    int player_choice;
 
     switch (player_choice)
     {
@@ -373,7 +371,7 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
         player_damage_out = hero.loadout->damage + (hero.core.strength + hero.loadout->Item_statup[strenghtup]);
         break;
     case 2: // ranged
-        player_attack = hero.loadout->damage + (hero.core.agility + hero.loadout->Item_statup[agilityup]);
+        player_damage_out = hero.loadout->damage + (hero.core.agility + hero.loadout->Item_statup[agilityup]);
         break;
     default:   //error de ataque  no existente
         break;
@@ -444,7 +442,7 @@ void player_lvlup(struct Hero *hero){                 // Módulo lógico del asc
 
         /*solicitud de la opicon del jugador*/
 
-        switch ()
+        switch (/*case*/)
         {
         case 1:
             hero->core.defence = hero->core.defence + 1;
