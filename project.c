@@ -363,7 +363,7 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
     int player_attack_choice; // Tipo de ataque deljugador
     int player_damage_out;
     int player_choice;
-    int addamage;
+    int addamage = 0;
     bool evaded;
     bool usedskill;
     int ability;
@@ -378,11 +378,11 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
     {
     case 1: // mele
         do{
-          addamage=(hero.core.strength + hero.loadout[i]->Item_statup[strenghtup]);
+          addamage = addamage + hero.loadout[i]->Item_statup[strenghtup];
           i++;
         }while (i<6);
         usedskill = false;
-        player_damage_out = hero.loadout->damage + addamage;
+        player_damage_out = hero.loadout->damage + hero.core.strenght + addamage;
         evaded=evade_attempt(1,hero,enemy);
         break;
     case 2: // ranged
