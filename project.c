@@ -1,7 +1,7 @@
 /*
 Yevhenii Edelshteyn
 Marat Galiullin
-
+Abel López Rodríguez
 2023-2024
 */
 
@@ -67,8 +67,7 @@ enum Item_statup{
 
 struct Skills{
     int strength;
-    int coste;
-
+    int cost;
 };
 struct Core{
     char name[NAMEMAX];   
@@ -364,31 +363,112 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
     int player_attack_choice; // Tipo de ataque deljugador
     int player_damage_out;
     int player_choice;
+    int addamage;
+    bool evaded;
+    bool usedskill;
+    int ability;
+    int i = 0;
 
+    do
+    {
+        /* selección deacción */
+    } while (/*acción válida*/);
+    
     switch (player_choice)
     {
     case 1: // mele
-        player_damage_out = hero.loadout->damage + (hero.core.strength + hero.loadout->Item_statup[strenghtup]);
+        do{
+          addamage=(hero.core.strength + hero.loadout[i]->Item_statup[strenghtup]);
+          i++;
+        }while (i<6);
+        usedskill = false;
+        player_damage_out = hero.loadout->damage + addamage;
+        evaded=evade_attempt(1,hero,enemy);
         break;
     case 2: // ranged
-        player_damage_out = hero.loadout->damage + (hero.core.agility + hero.loadout->Item_statup[agilityup]);
+        do{
+          addamage=(hero.core.agility + hero.loadout->Item_statup[agilityup]);
+          i++;
+        }while (i<6);
+        usedskill = false;
+        player_damage_out = hero.loadout->damage + addamage;
+        evaded=evade_attempt(1,hero,enemy);
+        break;
+    case 3: // Habilidad
+        // selección de habilidad
+        if(hero.core.stamina-hero.core.skill[ability]->cost <= 0){
+            player_attack(hero,enemy);
+        }
+        else{
+        use_skill(1,ability,hero,enemy);
+        usedskill = true;
+        }
         break;
     default:   //error de ataque  no existente
         break;
     }
-
+ 
+    if (evaded = false && usedskill = false;)
+    {
+        enemy->core.health = enemy->core.health-(player_damage_out-enemy->core.defence);
+    }
 }
 
-void enemy_attack(struct Enemy *enemy){                // EL ataque del enemigo
+bool evade_attempt(int who, struct Hero hero, struct Enemy enemy){
+    
+    int evadenum;
+    int evademax;
+    int i = 0;
+
+    if (who == 0){
+        while (i<hero.core.evade)
+        {
+            evadenum = evadenum + dice_roll;
+            i++;
+        }
+        evadenum = evadenum - enemy.core.agility*8;
+    }
+    if (who == 1){
+        while (i<enemy.core.evade)
+        {
+            evadenum = evadenum + dice_roll;
+            i++;
+        }
+        evadenum = evadenum - hero.core.agility*10;
+    }
+    evademax = i*12;
+    if(evadenum>rand()%evademax){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+void use_skill(int who, int ability, struct Hero *hero, struct Enemy *enemy){
+    if (who == 0){
+        enemy->core.stamina = enemy->core.stamina - enemy->core.skill[ability]->cost;
+        hero->core.health = hero->core.health - enemy->core.skill[ability].strength + enemy->core.inteligence;
+    }
+    if (who == 1){
+        hero->core.stamina = hero->core.stamina - hero->core.skill[ability]->cost;
+        enemy->core.health = enemy->core.health - hero->core.skill[ability].strength + hero->core.inteligence;
+    }
+    
+}
+
+void enemy_attack(struct Hero hero, struct Enemy enemy){                // EL ataque del enemigo
 
 }
 
 void combat_reward(struct Hero *hero, struct Enemy *enemy){               // Módulo lógico de la recompensa
-
+    hero->experince = hero->experince + enemy->exp_reward;
+    hero->gold = hero->gold + enemy->gold_reward;
+    
 }
 
 void item_use(struct Hero *hero, struct Enemy *enemy){                    // Módulo lógico del uso de un objeto consumible/usable
-
+    // item select
     switch (/*Item used from enum*/)
     {
     case 1:
