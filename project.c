@@ -5,10 +5,6 @@ Abel López Rodríguez
 2023-2024
 */
 
-/*
-tecla de cambio entre mivimiento y manipulacion del menu con flechas;;
-*/
-
 // Bibliotecas requeridas para el juego.
 #include <math.h>                   // Libreria matemática
 #include <stdbool.h>                // Libreria de los buleanos
@@ -16,67 +12,88 @@ tecla de cambio entre mivimiento y manipulacion del menu con flechas;;
 #include <stdlib.h>                 // Libreria estándart del C
 #include <time.h>                   // Libreria del tiempo, relevante para los numeros aleatorios
 #include "tigr.h"                   // Libreria gráfica tigr
-//#include "items.h"
+#include "items.h"                  // Header de los objetos del juego
+#include "maps.h"                   // Header de los mapas del juego
+#include "enemies.h"                // Header de los enemigos del juego
 
 //Constantes utilizadas en le juego
 #define NAMEMAX 32
 
-
 //Enum de diferentes elementos del juego
-enum Difficulty{
+// Lista de dificultades presentes en el juego
+enum Difficulty{                
     Trivial, Easy, Medium, Hard, Extreme
 };
 
+// Lista de posibles acciones del enemigo
 enum atk{
-    mele, ranged, skill
+    mele, ranged, used_item, ult_attack, dmg_attack, used_heal
 };
 
+// Lista de habilidades de los enemigos
+enum Enemy_skills{
+    heal, buff, damage, ultimate;
+}
+
+// Lista de enemigos del juego
+// Lista del nivel griego
 enum Characters_Greece_and_Boss{
     Minotauro, Ares, Titan, Chimera, Uroboros, Talos, Spartak 
 };
 
+// Lista del nivel escandinvo
 enum Characters_Scandi{
     Odin, Loki, Freyr, Ullr, Magni, Skadi, Vali, Frigg, Heimdall, Idunn
 };
 
+// Lista del nivel eslavo
 enum Characters_Slavic{
     Perun, Morena, Baba_Yaga, Kikimora, Svarog, Chernoslav, Nija, Korab, Chernobog, Belobog, Khotabych
 };
 
+// Lista del nievel secreto
 enum Secret_Lvls{
     Cthulhu, Kali, Boss_of_the_Gym, Disney, Giant_Sphinx
 };
 
+// Lista de actores (Jugador y enemigo)
 enum combat_actor{
     opponent,player
 };
 
+// Lista declases de heroes
 enum Heroes {
     Mage, Warrior, Rogue, knight
 };
 
+// Lista de objetos
 enum Items {
     potion_health, potion_strength, potion_stamina, potion_poison, potion_defense, sword, bow, axe, magic_wand
 };
 
+// Lista de habilidades
 enum SkilList {
     fireball, Skills, Exchange,  hehe
 };
 
+// Lista de laspartes del cuerpo
 enum Body_parts{
     head, body, l_hand, r_hand, l_finger, r_finger, legs
 };
 
+// Lista de mejoras de estadisiticas que pueden aportar los objetos
 enum Item_statup{
     strenghtup, luckup, agilityup, evadeup, intelligenceup, defenceup
 };
 
 // Structs de los elementos básicos como personajes/enemigos, objetos, etc
-
+// Struct delas habilidades
 struct Skills{
     int strength;
     int cost;
 };
+
+// Struct base de un actor
 struct Core{
     char name[NAMEMAX];   
     int health;
@@ -89,15 +106,12 @@ struct Core{
     int level;
     int stamina;
     int position[2];                 // x-y-z
-    struct Skills skill[20];
+    struct Skills skill[20];         // El enemigo siempre tiene hasta 4 (curación, bufo, daño, ultimate)
     int range_attack;
     int mele_attack;
 };
 
-struct Map_tile{
-    int position[2];                 // x-y-z
-};
-
+// Struct del actor enemigo
 struct Enemy{
     struct Core core;
     int difficulty;
@@ -107,8 +121,12 @@ struct Enemy{
     int item_reward_set[10];          // Objetos que pueden ser recibidos
     bool item_reward;
     int time_effect;
+    int meledamage;
+    int rangedamage;
+    int enemy_health_potion;
 };
 
+// Struct de los objetos
 struct Item{
     int body_part;
     int price;
@@ -120,7 +138,8 @@ struct Item{
     bool mele;
 };
 
-struct Hero{
+// Struct del jugador
+struct Hero{                        
     struct Core core;
     struct Item loadout[7];
     struct Item inventory[20];
@@ -131,8 +150,12 @@ struct Hero{
     int experince;
     int perception;
     int time_effect;
+    int X_pos;
+    int Y_pos;
+    int Z_pos;
 };
 
+// Struct de ajustes del juego
 struct GameOp{
     int window_w;
     int window_h;
@@ -200,13 +223,13 @@ void settings( struct GameOp *game){
 
 }
 
-int dice_roll(int dice_result){   // Módulo lógico de la tirada de dados virtuales    
-    
-    dice_result=rand()%21;
-    
+// Módulo que devueleve un núemro aleatorio entre 0 y 20
+int dice_roll(int dice_result){    
+    dice_result=rand()%21; 
 }
 
-void charcter_create(struct Hero *hero){             // Módulo lógico de la creacion del protagonista
+// Módulo de la creacion del personaje del jugador
+void charcter_create(struct Hero *hero){             
 
 scanf("%c", *hero->core.name);
 
@@ -333,7 +356,7 @@ void enemy_creator_Greece(){
 
 }
 
-void enemy_creator_Minotaur(){
+void enemy_creator_Scandinavian(){
 
 }
 
@@ -341,47 +364,17 @@ void enemy_creator_Slavic(){
 
 }
 
-void enemy_creator_Scandinavia(){
+void enemy_creator_Secret(){
 
 }
 
-void enemy_creator_Asia(){
-
-}
-
-void enemy_creator_Mesopotamia(){
-
-}
-
-void enemy_creator_Aztec(){
-
-}
-
-void enemy_creator_Svalka(){
-
-}
-
-void enemy_creator_Chulhu(){
-
-}
-
-void enemy_creator_Kali(){
-
-}
-
-void enemy_creator_Egypt(){
-
-}
-
-void enemy_creator_Gym(){
-
-}
-
+// Módulo del inicio del combate
 void combat(struct Enemy *enemy, struct Hero *hero){
 
 }
 
-void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1){                // Compración de las iniciativas de los opponentes
+// Módulo que decide quien tiene el primer turno
+void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1){
     // a lo mejor sustituir el modulo de void al bool
     if(hero.core.agility>enemy.core.agility){
         hero_attacks1=true;
@@ -392,7 +385,9 @@ void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1)
 
 }
 
-void player_attack(struct Hero hero, struct Enemy *enemy){               // El ataque del jugador
+// CON EL CAMBIO A ITEMS HACE FALTA EDITAR EL MODULO!!!!!
+// El ataque del jugador
+void player_attack(struct Hero hero, struct Enemy *enemy){
 
     int player_attack_choice; // Tipo de ataque deljugador
     int player_damage_out;
@@ -455,6 +450,7 @@ void player_attack(struct Hero hero, struct Enemy *enemy){               // El a
     }
 }
 
+// Módulo que comprueba si el actor puedo esquivar un ataque
 bool evade_attempt(int atk, int who, struct Hero hero, struct Enemy enemy){
     
     int evadenum;
@@ -496,6 +492,7 @@ bool evade_attempt(int atk, int who, struct Hero hero, struct Enemy enemy){
     }
 }
 
+// Módulo de uso de una habilidad
 void use_skill(int who, int ability, struct Hero *hero, struct Enemy *enemy){
 
     if (who == opponent){
@@ -508,17 +505,19 @@ void use_skill(int who, int ability, struct Hero *hero, struct Enemy *enemy){
     }
 }
 
+// Módulo de la IA del enemigo en el combate
 int IA(struct Hero hero, struct Enemy enemy){
-    int range_chance = 0;
-    int mele_chance = 0;
-    int skill_chance = 0;
-    int useitem_chance = 0;
-    int totalherodef = 0;
     int i = 0;
+    int totalherodef = 0;
     int heromele = 0;
     int herorange = 0;
+    int heroskill = 0;
+    int enemyskill = 0;
+    int agro = 0;
+    int enemyhealitem = enemy.core.health+10;
+    int enemyhealskill = enemy.core.health+enemy.core.skill[heal].strenght;
 
-    if (hero.core.mele_attack = 1){
+    if (hero.core.mele_attack = 1){ // Daño H2H del heroe
         do{
             heromele = heromele + hero.loadout[i]->Item_statup[strenghtup];
             i++;
@@ -527,7 +526,7 @@ int IA(struct Hero hero, struct Enemy enemy){
         heromele = hero.loadout[l_hand]->damage + hero.loadout[r_hand]->damage + hero.core.strenght + heromele;
     }
 
-    if (hero.core.range_attack = 1){
+    if (hero.core.range_attack = 1){ // Daño ranged del heroe
         do{
             herorange = herorange + hero.loadout[i]->Item_statup[agilityup];
             i++;
@@ -536,55 +535,48 @@ int IA(struct Hero hero, struct Enemy enemy){
         herorange = hero.loadout[l_hand]->damage + hero.loadout[r_hand]->damage + hero.core.agility + herorange;
     }
     
-    do{
+    do{ // Defensa máxima del heroe
         totalherodef = totalherodef + hero.loadout[i]->Item_statup[defenceup];
         i++;
     }while (i<8);
-    
-    if(enemy.core.health < heromele || enemy.core.health < herorange){
-        item_use(opponent,&hero,&enemy,potion_health);
-    }
+    totalherodef = hero.core.defence + totalherodef;
 
-    else{
-        if(hero->core.health > (hero->max_health/2)){
-            if(hero->core.agility > enemy.core.agility){
-                skill_chance++;
-                mele_chance++;
-            }
-            if(hero->core.agility < enemy.core.agility){
-                mele_chance++;
-                range_chance++;
-            }
-            if(totalherodef > enemy.core.agility){
-                mele_chance++;
-            }
-            if(totalherodef > enemy.core.strength){
-                range_chance++;
-            }
-            if(enemy.core.strength > enemy.core.agility){
-                mele_chance++;
-            }
-            if(enemy.core.agility >  enemy.core.strength){
-                range_chance++;
-            }
-        }
-
-        if(hero->core.health < (hero->max_health/2)){
-
+    if(hero.core.health < hero.max_health/2){
+        agro = 1;
+        if(hero.core.health < hero.max_health/4){
+            agro = 2
         }
     }
+    if(hero.core.health =< enemy.meledamage || hero.core.health =< enemy.rangedamage || hero.core.health =< enemy.core.skill[0]){
+        agro = 3;
+    }
 
-    if(mele_chance > range_chance && mele_chance > skill_chance){
-        return mele;
+    if(enemy.core.health =< heromele || enemy.core.health =< herorange || enemy.core.health =< heroskill || agro != 3){ //
+        if(enemy.enemy_health_potion != 0 && enemyhealitem > heromele && enemyhealitem > herorange && enemyhealitem > heroskill){
+            return used_item;
+        }
+        if(enemy.core.stamina >= enemy.core.skill[heal].cost && enemyhealskill > heromele && enemyhealskill > herorange && enemyhealskill > heroskill){
+            return used_heal;
+        }
     }
-    if (range_chance > mele_chance && range_chance > skill_chance){
-        return ranged;
+    // esto rework
+    if(totalherodef > enemy.meledamage && totalherodef > enemy.rangedamage){
+        if(totalherodef > enemy.core.skill[damage].strenght && enemy.core.stamina < enemy.core.skill[damage].cost){
+            if(totalherodef > enemy.core.skill[ultimate].stregth && enemy.core.stamina < enemy.core.skill[ultimate].cost){
+                if(enemy.core.mele_attack = 1){
+                    return mele;
+                }
+                else{
+                    return ranged;
+                }
+            }
+            return dmg_attack;
+        }
+
     }
-    if (skill_chance > mele_chance && skill_chance > range_chance){
-        return skill;
-    }   
 }
 
+// Módulo del  ataque del jugador
 void enemy_attack(struct Hero *hero, struct Enemy enemy){                // EL ataque del enemigo
 
     int enemy_damage_out,range_chance,skill_chance,mele_chance;
@@ -594,106 +586,77 @@ void enemy_attack(struct Hero *hero, struct Enemy enemy){                // EL a
     switch (IA(hero,enemy))
     {
     case mele:
-        enemy_damage_out = enemy.core.strength;
+        enemy_damage_out = enemy.meledamage; // otra formula parael daño
         evaded = evade_attempt(mele,opponent,hero,enemy);
         usedskill = false;
         break;
     case ranged:
-        enemy_damage_out = enemy.core.agility;
+        enemy_damage_out = enemy.rangedamage;
         evaded = evade_attempt(ranged,opponent,hero,enemy);
         usedskill = false;
         break;
-    case skill:
-        use_skill(opponent,enemy.core.skill[used],hero,enemy);
+    case dmg_attack:
+        enemy.core.stamina = enemy.core.stamina - enemy.core.skill[damage].cost;
+        enemy_damage_out = enemy.core.skill.[damage].strenght;
         usedskill = true;
+        break;
+    case ult_attack:
+        enemy.core.stamina = enemy.core.stamina - enemy.core.skill[ultimate].cost;
+        enemy_damage_out = enemy.core.skill[ultimate].strenght
+        usedskill =  true;
+        break;
+    case used_heal:
+        enemy.core.stamina = enemy.core.stamina - enemy.core.skill[heal].cost;
+        nemy.core.health = enemy.core.health + enemy.core.skill[heal].strenght;
+        break;
+    case used_item:
+        enemy.enemy_health_potion = enemy.enemy_health_potion-1;
+        enemy.core.health = enemy.core.health+10;
         break;
     default:
         break;
     }
 
-    if(evaded == false && usedskill == false){
-        hero->core.agility = hero->core.health-(enemy_damage_out - hero->core.defence);
-    }
+    // attack damage 
 }
 
-void combat_reward(struct Hero *hero, struct Enemy *enemy){               // Módulo lógico de la recompensa
+// Módulo de la recompensa del combate
+void combat_reward(struct Hero *hero, struct Enemy *enemy){
     hero->experince = hero->experince + enemy->exp_reward;
     hero->gold = hero->gold + enemy->gold_reward;
     
 }
 
-// enemyuse es de uso exclusivo de la ia, introduce el numero cualquiera para el jugador
-void item_use(int who, struct Hero *hero, struct Enemy *enemy, int enemyuse){                    // Módulo lógico del uso de un objeto consumible/usable
-
-    if(who == player){
-        // item select
-        switch (/*Item used from enum*/){
-            case potion_health:
-                hero->core.health = hero->core.health + 10;
-                break;
-            case potion_stamina:
-                hero->core.stamina = hero->core.stamina + 10;
-                break;
-            case potion_strength:
-                hero->core.strength = hero->core.strength + 10;
-                hero->time_effect = hero.time_effect + ;;                          //Esta v=riable se usara como temporizador de el efecto que da el objeto (Por turnos).
-                break;
-            case potion_poison:
-                enemy->core.health = enemy->core.health -1;
-                enemy->time_effect = enemy->time_effect + 2;
-                break;
-            case potion_defense:
-                hero->core.defence = hero->core.defence + 10;
-                hero->time_effect = hero->time_effect + 2;
-                break;  
-            default: // error de ausencia del item
-                break;
-        }
-    }
-    if(who == opponent){
-        switch (enemyuse)
-        {
-        case potion_health:
-            enemy->core.health = enemy->core.health + 10;
-            break;
-        
-        default:
-            break;
-        }
-    }
-}
-
-void player_move(struct Hero *hero){                // Módulo lógco del movimineto del jugador en vértices xyz
-    if(/*x*/){
-        hero->core.position[1] = hero->core.position[1] + hero->facing_direction[1];
-    }
-    if (/*y*/)
-    {
-        hero->core.position[2] = hero->core.position[2] + hero->facing_direction[2];
-    }
-    if (/*z*/)
-    {
-        hero->core.position[3] = hero->core.position[3] + /*en fuincion de la escalera en la que estamos*/;
-    }
+// Módulo lógico del uso de un objeto consumible/usable
+void item_use(struct Hero *hero, struct Enemy *enemy){
     
+        // item select
+    switch (/*Item used from enum*/){
+        case potion_health:
+            hero->core.health = hero->core.health + 10;
+            break;
+        case potion_stamina:
+            hero->core.stamina = hero->core.stamina + 10;
+            break;
+        case potion_strength:
+            hero->core.strength = hero->core.strength + 10;
+            hero->time_effect = hero.time_effect + 2;    //Esta variable se usara como temporizador de el efecto que da el objeto (Por turnos).
+            break;
+        case potion_poison:
+            enemy->core.health = enemy->core.health -1;
+            enemy->time_effect = enemy->time_effect + 2;
+            break;
+        case potion_defense:
+            hero->core.defence = hero->core.defence + 10;
+            hero->time_effect = hero->time_effect + 2;
+            break;  
+        default: // error de ausencia del item
+            break;
+    }
 }
 
-
-    // !!!! Se pueede optimizar a numeros de 1 a 4 con suma siendo el giro a la derecha y resta a la izquierda, donde 0 es 4 y 5 es 1
-
-void player_turn_right(struct Hero *hero){ // Módulo lógico del cambio de la dirección a la derecha
-
-    bool have_turned = false;
-
-}
-
-void player_turn_left(struct Hero *hero){ // Módulo lógico del cambio de la dirección a la izquierda
-
-    bool have_turned = false;
-
-}
-
-void player_lvlup(struct Hero *hero){                 // Módulo lógico del ascenso del nivel del jugador
+// Módulo del ascenso del nivel del jugador
+void player_lvlup(struct Hero *hero){
     /*Pense en el concepto de abrir una ventana aparte con el spreadshit del jugador para modificar en ella las estats  deseadas*/
     int stat_points = 5;
     int choice;
@@ -704,10 +667,9 @@ void player_lvlup(struct Hero *hero){                 // Módulo lógico del asc
     hero->core.health = hero->max_health;
 
     do{
-
         /*solicitud de la opicon del jugador*/
 
-        switch (/*case*/)
+        switch (choice)
         {
         case 1:
             hero->core.agility = hero->core.agility + 1;
@@ -736,11 +698,8 @@ void player_lvlup(struct Hero *hero){                 // Módulo lógico del asc
 
 }
 
-void inspect(){                     // Módulo lógico del mensaje al inspeccionar un elemento del juego
-
-}
-
-void shop(struct Hero *hero){                        // Módulo lógico de las tiendas en el juego
+// Módulo de la tienda del juego
+void shop(struct Hero *hero, struct Item *item){                        // Módulo lógico de las tiendas en el juego
 
     switch(hero->inverntory[]){         //Switch para vender objetos
         case 1:
@@ -750,58 +709,49 @@ void shop(struct Hero *hero){                        // Módulo lógico de las t
             break;
     }
 
-    switch (hero->core.position[/*z*/])
-c>-or-orae
+    switch (hero->core.position[/*z*/]){
+        case potion_defense:
+            if(hero->core>=item->price){
+               hero->gold = hero->gold - item->price;
+            }else{
+                //Dinero insuficiente.
+            }
+            break;
+        case potion_health:
+            if(hero->core>=item->price){
+               hero->gold = hero->gold - item->price;
+            }else{
+                //Dinero insuficiente.
+            }
+            break;
+        case potion_poison:
+            if(hero->core>=item->price){
+               hero->gold = hero->gold - item->price;
+            }else{
+                //Dinero insuficiente.
+            }
+            break;
+        case potion_stamina:
+            if(hero->core>=item->price){
+               hero->gold = hero->gold - item->price;
+            }else{
+                //Dinero insuficiente.
+            }
+            break;
+        case potion_strength:
+            if(hero->core>=item->price){
+               hero->gold = hero->gold - item->price;
+            }else{
+                //Dinero insuficiente.
+            }
+            break;
         default:
             break;
-        }
-
-    }while(stat_points>0);
-
+    }
 }
 
-void inspect(){                     // Módulo lógico del mensaje al inspeccionar un elemento del juego
-
-}
-
-void shop(struct Hero *hero){                        // Módulo lógico de las tiendas en el juego
-
-    switch (hero->core.position[/*z*/])
-c>-or-orae
-        default:
-            break;
-        }
-
-    }while(stat_points>0);
-
-}
-
-void inspect(){                     // Módulo lógico del mensaje al inspeccionar un elemento del juego
-
-}
-
-void shop(struct Hero *hero){                        // Módulo lógico de las tiendas en el juego
-
-    switch (hero->core.position[/*z*/])
-    {
-    case potion_health:
-        if(hero->gold >= item->price){
-            
-        }else{
-            printf("Dinero insuficiente");
-        }
-        break;
-    default:
-        break;
-}
-
-}
-
-void pov_change(/*Dependendo de la situacion mostrara una cosa u otra*/){                  // Módulo del cambio de los menús en la pantalla del juego
-/*pensé en usar este módulo tmb para crear una ventana aparte con cosas como el spreadsheet del  personaje, seria bastante parecido alos juegos de rol a papel  (d&d)*/
-}
-
-void game_over(struct Hero *hero){                   // Módulo lógico de la pérdida del partido
+//Módulo que acaba el juego
+void game_over(struct Hero *hero){
 /*purge the fucking game, alt F4 him*/
 /*A lo mejor pasarlo al bool, que así se puede cerrrar el juego con la condiocion true/dalse del modulo*/
 }
@@ -811,19 +761,5 @@ void save_game(){                    // Guardar el partido actual
 }
 
 void load_game(){                    // Cargar partido guardado
-
-}
-
-void event_stat_check(struct Hero *hero){            // Módulo lógico del tiro de dados virtual en un evento
-
-    switch (hero->core.position[/*z*/])
-    {
-    case /* constant-expression */:
-        /* code */
-        break;
-
-    default:
-        break;
-}
 
 }

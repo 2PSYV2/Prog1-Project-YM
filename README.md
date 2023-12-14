@@ -1,6 +1,6 @@
 # FrögHammers // FrögTekk
 
-Marat Galiullin / Y8142163Q \n
+Marat Galiullin / Y8142163Q 
 Yevhenii Edelshteyn / Y3298696L
 Abel López Rodríguez / 29576584X
 
@@ -8,4 +8,4 @@ Abel López Rodríguez / 29576584X
 
 Included libraries : Tigr.c.h
 
-To compile: gcc ./tigr.c NAME.c -o NAME -./tigr -lGLU -lGL -lX11
+To compile: gcc ./tigr.c rewardCode.c project.c -o NAME -./tigr -lGLU -lGL -lX11
