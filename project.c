@@ -12,7 +12,7 @@ Abel López Rodríguez
 #include <stdlib.h>                 // Libreria estándart del C
 #include <time.h>                   // Libreria del tiempo, relevante para los numeros aleatorios
 #include "tigr.h"                   // Libreria gráfica tigr
-#include "items.h"                  // Header de los objetos del juego
+#include "item.h"                  // Header de los objetos del juego
 #include "maps.h"                   // Header de los mapas del juego
 #include "enemies.h"                // Header de los enemigos del juego
 
@@ -27,33 +27,16 @@ enum Difficulty{
 
 // Lista de posibles acciones del enemigo
 enum atk{
-    mele, ranged, used_item, ult_attack, dmg_attack, used_heal
+    mele, ranged, hability, used_item
+};
+
+enum enemy_atk{
+    e_mele, e_ranged, e_dmg_attack, e_ult_attack, e_used_item, e_used_heal
 };
 
 // Lista de habilidades de los enemigos
 enum Enemy_skills{
     heal, buff, damage, ultimate;
-}
-
-// Lista de enemigos del juego
-// Lista del nivel griego
-enum Characters_Greece_and_Boss{
-    Minotauro, Ares, Titan, Chimera, Uroboros, Talos, Spartak 
-};
-
-// Lista del nivel escandinvo
-enum Characters_Scandi{
-    Odin, Loki, Freyr, Ullr, Magni, Skadi, Vali, Frigg, Heimdall, Idunn
-};
-
-// Lista del nivel eslavo
-enum Characters_Slavic{
-    Perun, Morena, Baba_Yaga, Kikimora, Svarog, Chernoslav, Nija, Korab, Chernobog, Belobog, Khotabych
-};
-
-// Lista del nievel secreto
-enum Secret_Lvls{
-    Cthulhu, Kali, Boss_of_the_Gym, Disney, Giant_Sphinx
 };
 
 // Lista de actores (Jugador y enemigo)
@@ -73,7 +56,7 @@ enum Items {
 
 // Lista de habilidades
 enum SkilList {
-    fireball, Skills, Exchange,  hehe
+    Minor_heal, Greater_heal, Minor_Fireball, Greater_Fireball, Health_Drain, Stamina_Drain, Health_Swap, CBT
 };
 
 // Lista de laspartes del cuerpo
@@ -106,7 +89,7 @@ struct Core{
     int level;
     int stamina;
     int position[2];                 // x-y-z
-    struct Skills skill[20];         // El enemigo siempre tiene hasta 4 (curación, bufo, daño, ultimate)
+    struct Skills skill[5];         // El enemigo siempre tiene hasta 4 (curación, bufo, daño, ultimate)
     int range_attack;
     int mele_attack;
 };
@@ -234,7 +217,7 @@ void charcter_create(struct Hero *hero){
 scanf("%c", *hero->core.name);
 
 switch (hero->class)
-{
+{ // Declare abilities
 case Mage:
     hero->core.agility  = 1;
     hero->core.defence = 3;
@@ -352,35 +335,50 @@ void enemy_creator_Tutorial(){
 
 }
 
-void enemy_creator_Greece(){
-
-}
-
-void enemy_creator_Scandinavian(){
-
-}
-
-void enemy_creator_Slavic(){
-
-}
-
-void enemy_creator_Secret(){
-
-}
-
-// Módulo del inicio del combate
+// Módulo principal del combate
 void combat(struct Enemy *enemy, struct Hero *hero){
+
+    int Herofirst;
+    int turn;
+
+    hero_attacks_1st(enemy, hero, Herofirst);
+    turn = Herofirst; // Poco práctico por usar void en hero_attacks_1st
+
+    do{
+
+       if (turn == 1){ // Primero ataca jugador
+        player_attack(*hero, *enemy);
+            if(enemy->core.health > 0){
+                enemy_attack(*hero, *enemy);
+            }
+       }
+
+       if(turn == 0){ // Primero ataca el enemigo
+        enemy_attack(*hero, *enemy);
+            if(hero->core.health > 0){
+                player_attack(*hero, *enemy);
+            }
+       }
+
+    } while (hero->core.health > 0 || enemy->core.health > 0);
+    
+    if(enemy->core.health < 0){
+        combat_reward(*hero,*enemy);
+    }
+    if(hero->core.health < 0){
+        game_over();
+    }
 
 }
 
 // Módulo que decide quien tiene el primer turno
-void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1){
+void hero_attacks_1st(struct Enemy enemy, struct Hero hero, int *hero_attacks1){
     // a lo mejor sustituir el modulo de void al bool
     if(hero.core.agility>enemy.core.agility){
-        hero_attacks1=true;
+        hero_attacks1= 1;
     }
     else{
-        hero_attacks1=false;
+        hero_attacks1= 0;
     }
 
 }
@@ -389,65 +387,79 @@ void hero_attacks_1st(struct Enemy enemy, struct Hero hero, bool *hero_attacks1)
 // El ataque del jugador
 void player_attack(struct Hero hero, struct Enemy *enemy){
 
-    int player_attack_choice; // Tipo de ataque deljugador
-    int player_damage_out;
-    int player_choice;
+    int player_damage_out = 0;
+    int player_choice = 0;
     int add_Damage = 0;
-    bool evaded;
-    bool usedskill;
+    bool evaded = false;
+    bool usedskill = false;
+    bool ended_turn = false;
     int ability;
+    int item;
     int i = 0;
 
-    do
-    {
-        /* selección deacción */
-    } while (/*acción válida*/);
-    
-    switch (player_choice)
-    {
-    case mele:
-        do{
-          add_Damage = add_Damage + hero.loadout[i]->Item_statup[strenghtup];
-          i++;
-        }while (i<8);
+    do{
 
-        usedskill = false;
-        
-        player_damage_out = hero.loadout->damage + hero.core.strenght + add_Damage;
-        evaded=evade_attempt(mele,player,hero,enemy);
-        
-        break;
-    case ranged:
         do{
-          add_Damage=(hero.core.agility + hero.loadout->Item_statup[agilityup]);
-          i++;
-        }while (i<8);
+            scanf("%d",player_choice);
+        } while (player_choice != mele || player_choice != ranged || player_choice != hability || player_choice != used_item);
         
-        usedskill = false;
+        switch (player_choice){
+        case mele:
+            do{
+            add_Damage = add_Damage + hero.loadout[i]->Item_statup[strenghtup];
+            i++;
+            }while (i<8);
 
-        player_damage_out = hero.loadout->damage + add_Damage;
-        evaded=evade_attempt(ranged,player,hero,enemy);
-        
-        break;
-    case skill:
-        // selección de habilidad
-        if(hero.core.stamina-hero.core.skill[ability]->cost <= 0){
-            player_attack(hero,enemy);
-        }
-        else{
+            usedskill = false;
             
-        use_skill(player,ability,hero,enemy);
-        usedskill = true;
+            player_damage_out = hero.loadout->damage + hero.core.strenght + add_Damage;
+            evaded=evade_attempt(mele,player,hero,enemy);
+
+            ended_turn = true;
+            
+            break;
+            
+        case ranged:
+            do{
+            add_Damage=(hero.core.agility + hero.loadout->Item_statup[agilityup]);
+            i++;
+            }while (i<8);
+            
+            usedskill = false;
+
+            player_damage_out = hero.loadout->damage + add_Damage;
+            evaded=evade_attempt(ranged,player,hero,enemy);
+
+            ended_turn = true;
+            
+            break;
+
+        case hability:
+            scanf("%d",ability);
+            if(hero.core.stamina-hero.core.skill[ability]->cost < 0){
+                // Do nothing
+            }
+            else{
+            use_skill(ability,hero,enemy);
+            usedskill = true;
+            ended_turn = true;
+            }
+            break;
+
+        case used_item: // due to rework
+            used_item(player,item);
+            ended_turn = true;
+            break;
         }
-        break;
-    default:   //error de ataque  no existente
-        break;
-    }
- 
-    if (evaded == false && usedskill == false)
+    
+
+    }while(ended_turn == false);
+
+    if (evaded == false && usedskill == false) // Change
     {
         enemy->core.health = enemy->core.health-(player_damage_out-enemy->core.defence);
     }
+
 }
 
 // Módulo que comprueba si el actor puedo esquivar un ataque
@@ -493,21 +505,45 @@ bool evade_attempt(int atk, int who, struct Hero hero, struct Enemy enemy){
 }
 
 // Módulo de uso de una habilidad
-void use_skill(int who, int ability, struct Hero *hero, struct Enemy *enemy){
+void use_skill(int ability, struct Hero *hero, struct Enemy *enemy){
 
-    if (who == opponent){
-        enemy->core.stamina = enemy->core.stamina - enemy->core.skill[ability]->cost;
-        hero->core.health = hero->core.health - enemy->core.skill[ability].strength + enemy->core.inteligence;
+    hero->core.stamina = hero->core.stamina - hero->core.skill[ability]->cost;
+    
+    switch (ability)
+    {
+    case Minor_Fireball:
+        enemy->core.health = enemy->core.health - hero->core.inteligence/2;
+        break;
+    case Greater_Fireball:
+        enemy->core.health = enemy->core.health - (hero->core.inteligence+hero->core.luck);
+        break;
+    case Minor_heal:
+        hero->core.health = hero->core.health + hero->core.inteligence/2;
+        break;
+    case Greater_heal:
+        hero->core.health = hero->core.health + (hero->core.inteligence+hero->core.luck);
+        break;
+    case Health_Drain:
+        hero.core.health = hero->core.health + (enemy->core.health - hero->core.inteligence/2);
+        enemy->core.health = enemy->core.health - hero->core.inteligence/2;
+        break;
+    case Stamina_Drain:
+        hero.core.stamina = hero.core.stamina + (enemy->core.stamina - hero->core.inteligence/2);
+        enemy->core.stamina = enemy->core.stamina-hero.core.inteligence/2;
+        break;
+    case CBT:
+        enemy->core.health = 0;
+        break;
     }
-    if (who == player){
-        hero->core.stamina = hero->core.stamina - hero->core.skill[ability]->cost;
-        enemy->core.health = enemy->core.health - hero->core.skill[ability].strength + hero->core.inteligence;
-    }
+
 }
 
 // Módulo de la IA del enemigo en el combate
 int IA(struct Hero hero, struct Enemy enemy){
     int i = 0;
+    bool evade;
+    int mele_chance = 0;
+    int range_chance = 0;
     int totalherodef = 0;
     int heromele = 0;
     int herorange = 0;
@@ -518,6 +554,7 @@ int IA(struct Hero hero, struct Enemy enemy){
     int enemyhealskill = enemy.core.health+enemy.core.skill[heal].strenght;
 
     if (hero.core.mele_attack = 1){ // Daño H2H del heroe
+        i = 0;
         do{
             heromele = heromele + hero.loadout[i]->Item_statup[strenghtup];
             i++;
@@ -526,7 +563,8 @@ int IA(struct Hero hero, struct Enemy enemy){
         heromele = hero.loadout[l_hand]->damage + hero.loadout[r_hand]->damage + hero.core.strenght + heromele;
     }
 
-    if (hero.core.range_attack = 1){ // Daño ranged del heroe
+    if (hero.core.range_attack = 1){ // Daño de ataque a distancia del heroe
+        i = 0;
         do{
             herorange = herorange + hero.loadout[i]->Item_statup[agilityup];
             i++;
@@ -535,34 +573,55 @@ int IA(struct Hero hero, struct Enemy enemy){
         herorange = hero.loadout[l_hand]->damage + hero.loadout[r_hand]->damage + hero.core.agility + herorange;
     }
     
+    i = 0;
     do{ // Defensa máxima del heroe
         totalherodef = totalherodef + hero.loadout[i]->Item_statup[defenceup];
         i++;
     }while (i<8);
     totalherodef = hero.core.defence + totalherodef;
 
-    if(hero.core.health < hero.max_health/2){
+    i = 0;
+    do{ // Probabilidad de dar ataque a mele
+        evade = evade_attempt(mele,opponent,*hero,*enemy);
+        if(evade == false){
+            mele_chance++;
+        }
+        i++;
+    }while(i < 10);
+
+    i = 0;
+    do{ // Probabilidad de dar ataque a distancia
+        evade = evade_attempt(ranged,opponent,*hero,*enemy);
+        if(evade == false){
+            range_chance++;
+        }
+        i++;
+    }while(i < 10);
+
+    if(hero.core.health < hero.max_health/2){ // Cáluclo de la agresividad de la IA
         agro = 1;
         if(hero.core.health < hero.max_health/4){
             agro = 2
         }
     }
-    if(hero.core.health =< enemy.meledamage || hero.core.health =< enemy.rangedamage || hero.core.health =< enemy.core.skill[0]){
+
+    if(hero.core.health =< enemy.meledamage || hero.core.health =< enemy.rangedamage || hero.core.health =< enemy.core.skill[damage]){ // El caso de agresividad máxima
         agro = 3;
     }
 
-    if(enemy.core.health =< heromele || enemy.core.health =< herorange || enemy.core.health =< heroskill || agro != 3){ //
+    if(enemy.core.health =< heromele || enemy.core.health =< herorange || enemy.core.health =< heroskill || agro != 3){ // El caso donde la IA intenta sobrevivir
         if(enemy.enemy_health_potion != 0 && enemyhealitem > heromele && enemyhealitem > herorange && enemyhealitem > heroskill){
-            return used_item;
+            return e_used_item;
         }
         if(enemy.core.stamina >= enemy.core.skill[heal].cost && enemyhealskill > heromele && enemyhealskill > herorange && enemyhealskill > heroskill){
-            return used_heal;
+            return e_used_heal;
         }
     }
-    // esto rework
+
+    // Secuencia que implica que el enemigo no hace daño ni a mele ni a rango con un ataque básico
     if(totalherodef > enemy.meledamage && totalherodef > enemy.rangedamage){
-        if(totalherodef > enemy.core.skill[damage].strenght && enemy.core.stamina < enemy.core.skill[damage].cost){
-            if(totalherodef > enemy.core.skill[ultimate].stregth && enemy.core.stamina < enemy.core.skill[ultimate].cost){
+        if(totalherodef > enemy.core.skill[damage].strenght || enemy.core.stamina < enemy.core.skill[damage].cost){
+            if(totalherodef > enemy.core.skill[ultimate].stregth || enemy.core.stamina < enemy.core.skill[ultimate].cost){
                 if(enemy.core.mele_attack = 1){
                     return mele;
                 }
@@ -570,46 +629,119 @@ int IA(struct Hero hero, struct Enemy enemy){
                     return ranged;
                 }
             }
-            return dmg_attack;
+            else{
+                return e_ult_attack;
+            }
         }
-
+        else{
+            return e_dmg_attack;
+        }
+    }
+    // Secuencia donde el enemigo puede meter daño de ataque básico
+    else{
+        if(enemy.core.skill[damage].strength > enemy.meledamage && enemy.core.skill[damage].strength > enemy.rangedamage && enemy.core.skill[damage].cost <= enemy.core.stamina){
+            if (enemy.core.skill[ultimate].strength > enemy.core.skill[damage].strength && enemy.core.skill[ultimate].cost <= enemy.core.stamina){
+                return e_ult_attack;
+            }
+            else{
+                return e_dmg_attack;
+            }
+        }
+        else{
+            if(hero.core.agility > enemy.core.agility){
+                if(agro > 1){
+                    if(agro > 2){
+                        if(enemy.meledamage > enemy.rangedamage){
+                            return e_mele;
+                        }
+                        else{
+                            return e_ranged;
+                        }
+                    }
+                    else{
+                        if(enemy.meledamage > enemy.rangedamage && mele_chance >= 7){
+                            return e_mele;
+                        }
+                        else{
+                            if(enemy.meledamage < enemy.rangedamage && range_chance >= 7){
+                                return e_ranged;
+                            }
+                            else{
+                                if(range_chance < mele_chance){
+                                    return e_ranged;
+                                }
+                                else{
+                                    return e_mele;
+                                }
+                            }
+                        }
+                    }
+                }
+                else{ // asdkajsflkjflajñfkañsf
+                    if(enemy.meledamage > enemy.rangedamage && mele_chance >= 5){
+                        return e_mele;
+                    }
+                    else{
+                        if(enemy.meledamage < enemy.rangedamage && range_chance >= 5){
+                        return e_ranged;
+                        }
+                        else{
+                            if(range_chance < mele_chance){
+                                return e_ranged;
+                            }
+                            else{
+                                return e_mele;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                if(enemy.meledamage > enemy.rangedamage){
+                    return e_mele;
+                }
+                else{
+                    return e_ranged;
+                }
+            }
+        }
     }
 }
 
 // Módulo del  ataque del jugador
 void enemy_attack(struct Hero *hero, struct Enemy enemy){                // EL ataque del enemigo
 
-    int enemy_damage_out,range_chance,skill_chance,mele_chance;
+    int enemy_damage_out = 0;
     int used;
-    bool evaded,usedskill;
-
+    bool evaded = false;
+    bool usedskill;
     switch (IA(hero,enemy))
     {
-    case mele:
+    case e_mele:
         enemy_damage_out = enemy.meledamage; // otra formula parael daño
         evaded = evade_attempt(mele,opponent,hero,enemy);
         usedskill = false;
         break;
-    case ranged:
+    case e_ranged:
         enemy_damage_out = enemy.rangedamage;
         evaded = evade_attempt(ranged,opponent,hero,enemy);
         usedskill = false;
         break;
-    case dmg_attack:
+    case e_dmg_attack:
         enemy.core.stamina = enemy.core.stamina - enemy.core.skill[damage].cost;
         enemy_damage_out = enemy.core.skill.[damage].strenght;
         usedskill = true;
         break;
-    case ult_attack:
+    case e_ult_attack:
         enemy.core.stamina = enemy.core.stamina - enemy.core.skill[ultimate].cost;
         enemy_damage_out = enemy.core.skill[ultimate].strenght
         usedskill =  true;
         break;
-    case used_heal:
+    case e_used_heal:
         enemy.core.stamina = enemy.core.stamina - enemy.core.skill[heal].cost;
         nemy.core.health = enemy.core.health + enemy.core.skill[heal].strenght;
         break;
-    case used_item:
+    case e_used_item:
         enemy.enemy_health_potion = enemy.enemy_health_potion-1;
         enemy.core.health = enemy.core.health+10;
         break;
@@ -617,7 +749,10 @@ void enemy_attack(struct Hero *hero, struct Enemy enemy){                // EL a
         break;
     }
 
-    // attack damage 
+    if(evaded == false){
+        hero->core.health = hero->core.health - enemy_damage_out;
+    }
+    
 }
 
 // Módulo de la recompensa del combate
@@ -630,8 +765,11 @@ void combat_reward(struct Hero *hero, struct Enemy *enemy){
 // Módulo lógico del uso de un objeto consumible/usable
 void item_use(struct Hero *hero, struct Enemy *enemy){
     
-        // item select
-    switch (/*Item used from enum*/){
+    int itemused;
+
+    scanf("%d", itemused);
+
+    switch (itemused){
         case potion_health:
             hero->core.health = hero->core.health + 10;
             break;
@@ -650,8 +788,6 @@ void item_use(struct Hero *hero, struct Enemy *enemy){
             hero->core.defence = hero->core.defence + 10;
             hero->time_effect = hero->time_effect + 2;
             break;  
-        default: // error de ausencia del item
-            break;
     }
 }
 
@@ -754,12 +890,4 @@ void shop(struct Hero *hero, struct Item *item){                        // Módu
 void game_over(struct Hero *hero){
 /*purge the fucking game, alt F4 him*/
 /*A lo mejor pasarlo al bool, que así se puede cerrrar el juego con la condiocion true/dalse del modulo*/
-}
-
-void save_game(){                    // Guardar el partido actual
-
-}
-
-void load_game(){                    // Cargar partido guardado
-
 }
