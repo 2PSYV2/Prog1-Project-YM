@@ -667,7 +667,7 @@ int IA(struct Hero hero, struct Enemy enemy){
                                 return e_ranged;
                             }
                             else{
-                                if(range_chance < mele_chance){
+                                if(range_chance < mele_chance && enemy.core.range_attack == 1){
                                     return e_ranged;
                                 }
                                 else{
@@ -686,7 +686,7 @@ int IA(struct Hero hero, struct Enemy enemy){
                         return e_ranged;
                         }
                         else{
-                            if(range_chance < mele_chance){
+                            if(range_chance < mele_chance && enemy.core.range_attack == 1){
                                 return e_ranged;
                             }
                             else{
