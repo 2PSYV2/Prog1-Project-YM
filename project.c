@@ -491,8 +491,8 @@ scanf("%c", *hero->core.name);
 printf(" elige tu clase: ");
 printf(" 1 - Mage ");
 printf(" 2 - Warrior ");
-printf(" 1 - Rogue ");
-printf(" 1 - Knight ");
+printf(" 3 - Rogue ");
+printf(" 4 - Knight ");
 
 do{
 
