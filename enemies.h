@@ -1,11 +1,16 @@
+#ifndef Enemies_H
+#define Enemies_H
+
+#define NAMEMAX 32
 #include <stdio.h>
+
 
 enum enemies{
     Black_Ooze, Black_Thing, Caribean, Dno, DraKek, Dummy, ExBlue, Hidra, Liche, Minotaur, Paleno, SillyLilGuy, Skeletik, Skuf, TheWock, TrollBlue
 };
 
 enum Enemy_skills{
-    heal, buff, damage, ultimate;
+    heal, buff, damage, ultimate
 };
 
 struct Skills{
@@ -62,53 +67,340 @@ case Black_Ooze:
     enemy.core.skill[damage].cost = 5;
     enemy.core.skill[damage].stregth = 5;
     enemy.core.skill[ultimate].cost = 10;
-    enemy.core.skill[ultimate].stregth = 10:
+    enemy.core.skill[ultimate].stregth = 10;
     enemy.meledamage = 2;
     enemy.enemy_health_potion = 1;
     break;
 
 case Black_Thing:
+    enemy.core.name = "Black Thing";
+    enemy.core.health = 10;
+    enemy.core.defence = 3;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 5;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 1;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
     break;
 
 case Caribean:
-    break Caribean;
+    enemy.core.name = "Caribean";
+    enemy.core.health = 10;
+    enemy.core.defence = 3;
+    enemy.core.evade = 1;
+    enemy.core.agility = 2;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 2;
+    enemy.core.level = 5;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 2;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Dno:
-    break Caribean;
+    enemy.core.name = "Dno";
+    enemy.core.health = 15;
+    enemy.core.defence = 3;
+    enemy.core.evade = 1;
+    enemy.core.agility = 3;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 6;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 3;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case DraKek:
-    break Caribean;
+    enemy.core.name = "DraKek";
+    enemy.core.health = 20;
+    enemy.core.defence = 5;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 8;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 2;
+    enemy.core.mele_attack = 2;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Dummy:
-    break Caribean;
+    enemy.core.name = "Dummy";
+    enemy.core.health = 1;
+    enemy.core.defence = 1;
+    enemy.core.evade = 0;
+    enemy.core.agility = 0;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 0;
+    enemy.core.level = 1;
+    enemy.core.stamina = 0;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 0;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case ExBlue:
-    break Caribean;
+    enemy.core.name = "ExBlue";
+    enemy.core.health = 20;
+    enemy.core.defence = 5;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 8;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 2;
+    enemy.core.mele_attack = 2;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Hidra:
-    break Caribean;
+    enemy.core.name = "Hidra";
+    enemy.core.health = 25;
+    enemy.core.defence = 8;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 2;
+    enemy.core.mele_attack = 2;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Liche:
-    break Caribean;
+    enemy.core.name = "Liche";
+    enemy.core.health = 20;
+    enemy.core.defence = 5;
+    enemy.core.evade = 3;
+    enemy.core.agility = 5;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 10;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 5;
+    enemy.core.mele_attack = 5;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Minotaur:
-    break Caribean;
+    enemy.core.name = "Minotaur";
+    enemy.core.health = 20;
+    enemy.core.defence = 10;
+    enemy.core.evade = 1;
+    enemy.core.agility = 5;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 5;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 7;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Paleno:
-    break Caribean;
+    enemy.core.name = "Paleno";
+    enemy.core.health = 30;
+    enemy.core.defence = 10;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 5;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 7;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case SillyLilGuy:
-    break Caribean;
+    enemy.core.name = "SillyLilGuy";
+    enemy.core.health = 30;
+    enemy.core.defence = 10;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 10;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Skeletik:
-    break Caribean;
+    enemy.core.name = "Skeletik";
+    enemy.core.health = 20;
+    enemy.core.defence = 10;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 10;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 8;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case Skuf:
-    break Caribean;
+    enemy.core.name = "Skuf";
+    enemy.core.health = 40;
+    enemy.core.defence = 20;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 5;
+    enemy.core.level = 15;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 20;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case TheWock:
-    break Caribean;
+    enemy.core.name = "TheWock";
+    enemy.core.health = 40;
+    enemy.core.defence = 30;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 15;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 20;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 
 case TrollBlue:
-    break Caribean;
+    enemy.core.name = "TrollBlue";
+    enemy.core.health = 20;
+    enemy.core.defence = 10;
+    enemy.core.evade = 1;
+    enemy.core.agility = 1;
+    enemy.core.luck = 0;
+    enemy.core.inteligence = 1;
+    enemy.core.level = 8;
+    enemy.core.stamina = 10;
+    enemy.core.range_attack = 0;
+    enemy.core.mele_attack = 10;
+    enemy.core.skill[heal].cost = 5;
+    enemy.core.skill[heal].stregth = 5;
+    enemy.core.skill[damage].cost = 5;
+    enemy.core.skill[damage].stregth = 5;
+    enemy.core.skill[ultimate].cost = 10;
+    enemy.core.skill[ultimate].stregth = 10;
+    enemy.meledamage = 2;
+    enemy.enemy_health_potion = 1;
+    break;
 }
+
+#endif

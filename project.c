@@ -149,11 +149,11 @@ int main(){
     hero.core.health = 1;
 
     main_menu();
+    charcter_create(&hero);
 
     srand(time(NULL));
+
         do{
-            main_menu();
-            charcter_create(&hero);
             move(&player, &enemy, &hero);
         }while(hero.core.health != 0);
     
@@ -425,8 +425,8 @@ bool isValidMove(int x, int y, int *playerX, int *playerY, int *playerZ, bool *f
     if (x >= 0 && x < BOUND && y >= 0 && y < BOUND) {
         if (map[x][y] != '#') { // Check if the position is not a barrier
             if (map[x][y] == 'U' || map[x][y] == 'E') {
-                combat(&enemy,&hero,&playerX,&playerY,&playerZ);
                 printf("\nEntering fight mode!\n");
+                combat(&enemy,&hero,&playerX,&playerY,&playerZ);
             } else if (map[x][y] == 'C') {
                 // Check if the position has a chest ('C')
                 // rewardChest() function here

@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
-
 #define TRIVAL_COFF 0
 #define EASY_COFF 2
 #define MEDIUM_COFF 1.5
@@ -25,8 +20,7 @@ int main(){
     do{
             
             srand(time(NULL));
-            gold = rand()%MAX_GOLD;
-            item = rand()%MAX_ITEM;      
+            gold = rand()%MAX_GOLD;  
     
     do{
     printf("Introduce the difficulty: ");
