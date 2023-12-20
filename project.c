@@ -11,7 +11,6 @@ Abel López Rodríguez
 #include <stdio.h>                  // Libreria del input-Output
 #include <stdlib.h>                 // Libreria estándart del C
 #include <time.h>                   // Libreria del tiempo, relevante para los numeros aleatorios
-#include "tigr.h"                   // Libreria gráfica tigr
 #include "item.h"                  // Header de los objetos del juego
 #include "maps.h"                   // Header de los mapas del juego
 #include "enemies.h"                // Header de los enemigos del juego
@@ -113,8 +112,6 @@ struct Enemy{
     int enemy_health_potion;
 };
 
-
-
 // Struct de los objetos
 struct Item{
     int body_part;
@@ -130,8 +127,6 @@ struct Item{
 // Struct del jugador
 struct Hero{                        
     struct Core core;
-    struct Item loadout[7];
-    struct Item inventory[20];
     int facing_direction[4];
     int class;
     int gold;
@@ -144,49 +139,29 @@ struct Hero{
     int Z_pos;
 };
 
-// Struct de ajustes del juego
-struct GameOp{
-    int window_w;
-    int window_h;
-};
-
 // Main del programa
 int main(){
 
     // Struct game elements declaration
-    struct GameOp game;
     struct Hero hero;
     struct Enemy enemy;
     struct Position *player;
+    hero.core.health = 1;
 
     main_menu();
 
-    // ej: hero.core.name
-    // Default settings
-    game.window_w = 1920;
-    game.window_h = 1080;
-
     srand(time(NULL));
+        do{
+            main_menu();
+            charcter_create(&hero);
+            move(&player, &enemy, &hero);
+        }while(hero.core.health != 0);
     
-
-    Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);            // Módulo proncipal de la ventana gráfica
-    
-    
-    while(!tigrClosed(screen) || !tigrKeyDown(TK_ESCAPE) /* o incluso gameover == true*/){                        // Secuencia de salida del juego
-        
-        main_menu();
-        charcter_create(&hero);
-        
-        move(&player, &enemy, &hero);
-
-    }
-    tigrFree(screen);
     return 0;
 }
 
 int move(struct Position *player, struct Enemy *enemy, struct Hero *hero) {
     //Variables on position in a map and head
-    
 
     int x, y;
 
@@ -497,14 +472,14 @@ bool isValidMove(int x, int y, int *playerX, int *playerY, int *playerZ, bool *f
 
 void main_menu(){
 
-    while(!tigrKeyDown(TK_SPACE)){
-        /*Animación de "press space to continue"*/
-    }
-
-    while(event_game_menu_start){
-        /*mostrar el menú con opciones del juego "partda nueva etc."*/
-    }
-
+    char enter;
+    
+    printf("Labyrinth by Frög");
+    printf("press `c` to continue");
+    do{
+    scanf("%c",enter);
+    }while(enter != "c");
+    
 }
 
 // Módulo que devueleve un núemro aleatorio entre 0 y 20
@@ -516,87 +491,92 @@ int dice_roll(){
 // Módulo de la creacion del personaje del jugador
 void charcter_create(struct Hero *hero){             
 
+printf(" Dime tu nombre: ");
 scanf("%c", *hero->core.name);
-scanf("%d",hero->class);
-switch (hero->class)
-{ // Declare abilities
-case Mage:
-    hero->core.agility  = 1;
-    hero->core.defence = 3;
-    hero->core.evade = 0;
-    hero->core.health = 1;
-    hero->core.inteligence = 3;
-    hero->core.level = 0;
-    hero->core.luck = 1;
-    hero->core.stamina = 1;
-    hero->core.strength = 2;
-    hero->core.range_attack = 1;
-    hero->core.mele_attack = 0;
-    hero->experince = 0;
-    hero->gold = 10;
-    hero->max_health = 10;
-    hero->perception = 0;
-    break;
-case Warrior:
-    hero->core.agility  = 2;
-    hero->core.defence = 2;
-    hero->core.evade = 1;
-    hero->core.health = 2;
-    hero->core.inteligence = 1;
-    hero->core.level = 0;
-    hero->core.luck = 1;
-    hero->core.stamina = 2;
-    hero->core.strength = 2;
-    hero->gold = 10;
-    hero->core.range_attack = 0;
-    hero->core.mele_attack = 1;    
-    hero->experince = 0;
-    hero->max_health = 10;
-    hero->perception = 0;   
-    break;
-case Rogue:
-    hero->core.agility  = 3;
-    hero->core.defence = 1;
-    hero->core.evade = 2;
-    hero->core.health = 1;
-    hero->core.inteligence = 3;
-    hero->core.level = 0;
-    hero->core.luck = 1;
-    hero->core.stamina = 2;
-    hero->core.strength = 1;
-    hero->gold = 10;
-    hero->core.range_attack = 1;
-    hero->core.mele_attack = 0;    
-    hero->experince = 0;    
-    hero->max_health = 10;
-    hero->perception = 0;
-    break;
-case knight:
-    hero->core.agility  = 1;
-    hero->core.defence = 1;
-    hero->core.evade = 1;
-    hero->core.health = 1;
-    hero->core.inteligence = 1;
-    hero->core.level = 0;
-    hero->core.luck = 1;
-    hero->core.stamina = 1;
-    hero->core.strength = 1;
-    hero->gold = 20;
-    hero->core.range_attack = 0;
-    hero->core.mele_attack = 1;    
-    hero->experince = 0;    
-    hero->max_health = 10;
-    hero->perception = 0;
-default:
-    break;
+printf(" elige tu clase: ");
+printf(" 1 - Mage ");
+printf(" 2 - Warrior ");
+printf(" 3 - Rogue ");
+printf(" 4 - Knight ");
+
+do{
+
+    scanf("%d",hero->class);
+
+    switch (hero->class)
+    {
+    case Mage:
+        hero->core.agility  = 1;
+        hero->core.defence = 3;
+        hero->core.evade = 0;
+        hero->core.health = 1;
+        hero->core.inteligence = 3;
+        hero->core.level = 0;
+        hero->core.luck = 1;
+        hero->core.stamina = 1;
+        hero->core.strength = 2;
+        hero->core.range_attack = 1;
+        hero->core.mele_attack = 0;
+        hero->experince = 0;
+        hero->gold = 10;
+        hero->max_health = 10;
+        hero->perception = 0;
+        break;
+    case Warrior:
+        hero->core.agility  = 2;
+        hero->core.defence = 2;
+        hero->core.evade = 1;
+        hero->core.health = 2;
+        hero->core.inteligence = 1;
+        hero->core.level = 0;
+        hero->core.luck = 1;
+        hero->core.stamina = 2;
+        hero->core.strength = 2;
+        hero->gold = 10;
+        hero->core.range_attack = 0;
+        hero->core.mele_attack = 1;    
+        hero->experince = 0;
+        hero->max_health = 10;
+        hero->perception = 0;   
+        break;
+    case Rogue:
+        hero->core.agility  = 3;
+        hero->core.defence = 1;
+        hero->core.evade = 2;
+        hero->core.health = 1;
+        hero->core.inteligence = 3;
+        hero->core.level = 0;
+        hero->core.luck = 1;
+        hero->core.stamina = 2;
+        hero->core.strength = 1;
+        hero->gold = 10;
+        hero->core.range_attack = 1;
+        hero->core.mele_attack = 0;    
+        hero->experince = 0;    
+        hero->max_health = 10;
+        hero->perception = 0;
+        break;
+    case knight:
+        hero->core.agility  = 1;
+        hero->core.defence = 1;
+        hero->core.evade = 1;
+        hero->core.health = 1;
+        hero->core.inteligence = 1;
+        hero->core.level = 0;
+        hero->core.luck = 1;
+        hero->core.stamina = 1;
+        hero->core.strength = 1;
+        hero->gold = 20;
+        hero->core.range_attack = 0;
+        hero->core.mele_attack = 1;    
+        hero->experince = 0;    
+        hero->max_health = 10;
+        hero->perception = 0;
+    }
+}while(hero->class != 1 || hero->class != 2 || hero->class != 3 ||hero->class != 4);
+
 }
 
-
-/*EL resto de estats comunes que se asignen fuera del switch*/
-
-}
-
-// Módulo principal del combate
 void combat(struct Enemy *enemy, struct Hero *hero){
 
     int Herofirst;
@@ -608,15 +588,19 @@ void combat(struct Enemy *enemy, struct Hero *hero){
     do{
 
        if (turn == 1){ // Primero ataca jugador
+        printf("Turno del jugador");
         player_attack(*hero, *enemy);
             if(enemy->core.health > 0){
+                printf("Turno del enemigo");
                 enemy_attack(*hero, *enemy);
             }
        }
 
        if(turn == 0){ // Primero ataca el enemigo
+        printf("Turno del enemigo");
         enemy_attack(*hero, *enemy);
             if(hero->core.health > 0){
+                printf("Turno del jugador")
                 player_attack(*hero, *enemy);
             }
        }
@@ -627,7 +611,7 @@ void combat(struct Enemy *enemy, struct Hero *hero){
         combat_reward(*hero,*enemy);
     }
     if(hero->core.health < 0){
-        game_over(*hero);
+        game_over();
     }
 
 }
@@ -1064,7 +1048,7 @@ void player_lvlup(struct Hero *hero){
     hero->core.health = hero->max_health;
 
     do{
-        /*solicitud de la opicon del jugador*/
+        scnaf("%d",choice);
 
         switch (choice)
         {
@@ -1090,65 +1074,7 @@ void player_lvlup(struct Hero *hero){
             hero->core.strength = hero->core.strength + 1;
             break;      
         }
+        stat_points--;
+    }while(stat_points != 0);
 
-    }while(/**/);
-
-}
-
-// Módulo de la tienda del juego
-void shop(struct Hero *hero, struct Item *item){                        // Módulo lógico de las tiendas en el juego
-
-    switch(hero->inventory[]){         //Switch para vender objetos
-        case 1:
-            hero->gold = hero->gold + item.price;
-            break;
-        default:
-            break;
-    }
-
-    switch (hero->core.position[/*z*/]){
-        case potion_defense:
-            if(hero->core>=item->price){
-               hero->gold = hero->gold - item->price;
-            }else{
-                //Dinero insuficiente.
-            }
-            break;
-        case potion_health:
-            if(hero->core>=item->price){
-               hero->gold = hero->gold - item->price;
-            }else{
-                //Dinero insuficiente.
-            }
-            break;
-        case potion_poison:
-            if(hero->core>=item->price){
-               hero->gold = hero->gold - item->price;
-            }else{
-                //Dinero insuficiente.
-            }
-            break;
-        case potion_stamina:
-            if(hero->core>=item->price){
-               hero->gold = hero->gold - item->price;
-            }else{
-                //Dinero insuficiente.
-            }
-            break;
-        case potion_strength:
-            if(hero->core>=item->price){
-               hero->gold = hero->gold - item->price;
-            }else{
-                //Dinero insuficiente.
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-//Módulo que acaba el juego
-void game_over(struct Hero *hero){
-/*purge the fucking game, alt F4 him*/
-/*A lo mejor pasarlo al bool, que así se puede cerrrar el juego con la condiocion true/dalse del modulo*/
 }
