@@ -1307,7 +1307,7 @@ int IA(struct Hero hero, struct Enemy enemy){
 }
 
 // Módulo del  ataque del jugador
-void enemy_attack(struct Hero *hero, struct Enemy enemy){                // EL ataque del enemigo
+void enemy_attack(struct Hero *hero, struct Enemy *enemy){                // EL ataque del enemigo
 
     int enemy_damage_out = 0;
     int used;
