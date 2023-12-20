@@ -1,5 +1,4 @@
 #define NAMEMAX 32
-#include "item.c"
 #include <stdbool.h>
 
 enum items{

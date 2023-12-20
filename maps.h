@@ -4,15 +4,15 @@
 #define NUM_TEMPLATES 4
 #define BOUND 40
 
-typedef struct{
+struct Map{
     char tiles[BOUND][BOUND];
-} Map;
+};
 
-typedef struct{
+struct Position{
     int x;
     int y;
     int z;
-} Position;
+};
 
 const char Tutorial[BOUND][BOUND] = {
 "########################################",
@@ -228,3 +228,5 @@ const char map4[BOUND][BOUND] = {
 "#S                                  E F#",
 "########################################"    
 };
+
+#endif
