@@ -12,6 +12,7 @@ struct Position{
     int x;
     int y;
     int z;
+    int direction;
 };
 
 const char Tutorial[BOUND][BOUND] = {

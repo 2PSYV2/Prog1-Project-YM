@@ -191,6 +191,7 @@ int move(struct Position *player, struct Enemy *enemy, struct Hero *hero) {
     int x, y;
 
     int head = 1;
+    player->direction = 1;
     int mapsDone = 0;
 
     bool finished = false;
@@ -279,18 +280,22 @@ int move(struct Position *player, struct Enemy *enemy, struct Hero *hero) {
             case 'q':
             case 'Q':
                 head++;
+                player->direction = head;
                 
                 if(head == 5){
                     head = 1;
+                    player->direction = head;
                 }
                 
                 break;
             case 'e':
             case 'E':
                 head--;
+                player->direction = head;
                 
                 if(head == 0){
                     head = 4;
+                    player->direction = head;
                 }
                 
                 break;
