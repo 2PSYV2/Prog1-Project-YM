@@ -109,6 +109,8 @@ struct Enemy{
     int enemy_health_potion;
 };
 
+
+
 // Struct de los objetos
 struct Item{
     int body_part;
@@ -150,14 +152,16 @@ int main(){
     // Struct game elements declaration
     struct GameOp game;
     struct Hero hero;
-    struct Map_tile tile[2];
-    
+
+    main_menu();
+
     // ej: hero.core.name
     // Default settings
     game.window_w = 1920;
     game.window_h = 1080;
 
     srand(time(NULL));
+    charcter_create(&hero);
 
     Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);            // Módulo proncipal de la ventana gráfica
 
@@ -182,30 +186,6 @@ void main_menu(){
 
 }
 
-void event_game_menu_start(){
-
-}
-
-void settings( struct GameOp *game){
-
-    switch (/*Opcion de las probablemente 2 opciones*/)
-    {
-    case 1:
-        game->window_w = 1920;
-        game->window_h = 1080;
-        break;
-    case 2:
-        game->window_w = 1280;
-        game->window_h = 720;
-        break;    
-    default:    // Error de resolcion no existente
-        break;
-    }
-
-    Tigr *screen = tigrWindow(game->window_w,game->window_h,"PR1",0);
-
-}
-
 // Módulo que devueleve un núemro aleatorio entre 0 y 20
 int dice_roll(int dice_result){    
     dice_result=rand()%21; 
@@ -215,7 +195,7 @@ int dice_roll(int dice_result){
 void charcter_create(struct Hero *hero){             
 
 scanf("%c", *hero->core.name);
-
+scanf("%d",hero->class);
 switch (hero->class)
 { // Declare abilities
 case Mage:

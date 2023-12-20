@@ -31,6 +31,20 @@ struct Core{
     int meled_attack;
 };
 
+struct Enemy{
+    struct Core core;
+    int difficulty;
+    int gold_reward;
+    int exp_reward;
+    int item_reward_chance;
+    int item_reward_set[10];          // Objetos que pueden ser recibidos
+    bool item_reward;
+    int time_effect;
+    int meledamage;
+    int rangedamage;
+    int enemy_health_potion;
+};
+
 struct item{
     struct Core core;
     int body_part;
@@ -42,7 +56,7 @@ struct item{
     bool melee;
 };
 
-switch(){
+switch(items){
 
     case potion_healt:
         item.core.name = potion_healt;
