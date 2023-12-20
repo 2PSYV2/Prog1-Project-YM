@@ -9,7 +9,6 @@
 #define HARD_COFF 1
 #define EXTREME_COFF 0.5
 #define MAX_GOLD 51
-#define MAX_ITEM 2
 
 int main(){
     float coff;
