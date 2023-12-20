@@ -161,14 +161,16 @@ int main(){
     game.window_h = 1080;
 
     srand(time(NULL));
-    charcter_create(&hero);
+    
 
     Tigr *screen = tigrWindow(game.window_w,game.window_h,"PR1",0);            // Módulo proncipal de la ventana gráfica
-
+    
+    
     while(!tigrClosed(screen) || !tigrKeyDown(TK_ESCAPE) /* o incluso gameover == true*/){                        // Secuencia de salida del juego
-        /*game logic*/
-        /*main_menu*/
-        /*Character_create // a lo mejor lo hacemos fuera del bucle, irrelevante*/
+        
+        main_menu();
+        charcter_create(&hero);
+        
     }
     tigrFree(screen);
     return 0;
